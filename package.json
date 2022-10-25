@@ -1,0 +1,8 @@
+{
+  "name": "@activeui-cs/monorepo",
+  "version": "0.0.1",
+  "main": "index.ts",
+  "repository": "https://github.com/carlrizk/activeUI-centralesupelec",
+  "author": "Carl Rizk <carlrizk88@gmail.com>",
+  "license": "MIT"
+}
