@@ -38,6 +38,7 @@
   },
   "main": "index.ts",
   "scripts": {
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "prettier:check": "prettier --check ."
   }
 }
