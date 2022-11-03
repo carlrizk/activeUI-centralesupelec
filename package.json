@@ -1,33 +1,43 @@
 {
-    "name": "@activeui-cs/monorepo",
-    "version": "0.0.1",
-    "description": "Plugins for ActiveUI",
-    "keywords": [],
-    "license": "MIT",
-    "contributors": [
-        {
-            "name": "Carl Rizk",
-            "email": "carlrizk88@gmail.com"
-        },
-        {
-            "name": "David De La Hera Carretero",
-            "email": "d.delaherac@gmail.com"
-        },
-        {
-            "name": "Jimmy Akl",
-            "email": "akljimmy11@gmail.com"
-        }
-    ],
-    "repository": "https://github.com/carlrizk/activeUI-centralesupelec",
-    "devDependencies": {
-        "@typescript-eslint/eslint-plugin": "^5.0.0",
-        "eslint": "^8.0.1",
-        "eslint-config-standard-with-typescript": "^23.0.0",
-        "eslint-plugin-import": "^2.25.2",
-        "eslint-plugin-n": "^15.0.0",
-        "eslint-plugin-promise": "^6.0.0",
-        "eslint-plugin-react": "^7.31.10",
-        "typescript": "*"
+  "name": "@activeui-cs/monorepo",
+  "version": "0.0.1",
+  "description": "Plugins for ActiveUI",
+  "keywords": [],
+  "license": "MIT",
+  "contributors": [
+    {
+      "name": "Carl Rizk",
+      "email": "carlrizk88@gmail.com"
     },
-    "main": "index.ts"
+    {
+      "name": "David De La Hera Carretero",
+      "email": "d.delaherac@gmail.com"
+    },
+    {
+      "name": "Jimmy Akl",
+      "email": "akljimmy11@gmail.com"
+    }
+  ],
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  },
+  "repository": "https://github.com/carlrizk/activeUI-centralesupelec",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "eslint": "^8.0.1",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-standard-with-typescript": "^23.0.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-react": "^7.31.10",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3",
+    "prettier": "2.7.1",
+    "typescript": "*"
+  },
+  "main": "index.ts",
+  "scripts": {
+    "prepare": "husky install"
+  }
 }
