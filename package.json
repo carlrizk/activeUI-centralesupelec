@@ -4,5 +4,15 @@
   "main": "index.ts",
   "repository": "https://github.com/carlrizk/activeUI-centralesupelec",
   "author": "Carl Rizk <carlrizk88@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "eslint": "^8.0.1",
+    "eslint-config-standard-with-typescript": "^23.0.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-react": "^7.31.10",
+    "typescript": "*"
+  }
 }
