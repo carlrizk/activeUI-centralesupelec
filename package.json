@@ -4,6 +4,7 @@
   "description": "Plugins for ActiveUI",
   "keywords": [],
   "license": "MIT",
+  "private": "true",
   "contributors": [
     {
       "name": "Carl Rizk",
