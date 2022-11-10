@@ -36,20 +36,20 @@ jobs:
     executor: executor
     steps:
       - attach_workspace:
-        # Must be absolute path or relative path from working_directory
-        at: ./
+          # Must be absolute path or relative path from working_directory
+          at: ./
       - run:
-        name: Run lint
-        command: yarn lint
+          name: Run lint
+          command: yarn lint
   test:
     executor: executor
     steps:
       - attach_workspace:
-        # Must be absolute path or relative path from working_directory
-        at: ./
+          # Must be absolute path or relative path from working_directory
+          at: ./
       - run:
-        name: Run test
-        command: yarn test
+          name: Run test
+          command: yarn test
 
 workflows:
   # Below is the definition of your workflow.
@@ -60,10 +60,10 @@ workflows:
     jobs:
       - build
       - lint:
-        requires:
-          - build
+          requires:
+            - build
       - test:
-        requires:
-          - build
+          requires:
+            - build
       # For running simple node tests, you could optionally use the node/test job from the orb to replicate and replace the job above in fewer lines.
       # - node/test
