@@ -1,0 +1,9 @@
+{
+  "name": "@activeui-cs/package_1",
+  "version": "0.0.1",
+  "main": "index.ts",
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint"
+  }
+}
