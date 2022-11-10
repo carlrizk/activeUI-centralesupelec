@@ -32,18 +32,24 @@ jobs:
           # Must be relative path from root
           paths:
             - ./*
-  # lint:
-  #   executor: executor
-  #   steps:
-  #     - run:
-  #       name: Run lint
-  #       command: yarn lint
-  # test:
-  #   executor: executor
-  #   steps:
-  #     - run:
-  #       name: Run test
-  #       command: yarn test
+  lint:
+    executor: executor
+    steps:
+      - attach_workspace:
+        # Must be absolute path or relative path from working_directory
+        at: ./
+      - run:
+        name: Run lint
+        command: yarn lint
+  test:
+    executor: executor
+    steps:
+      - attach_workspace:
+        # Must be absolute path or relative path from working_directory
+        at: ./
+      - run:
+        name: Run test
+        command: yarn test
 
 workflows:
   # Below is the definition of your workflow.
@@ -53,11 +59,11 @@ workflows:
   build_and_lint:
     jobs:
       - build
-      # - lint
-      #   requires:
-      #     -build
-      # - test
-      #   requires:
-      #     -build
+      - lint:
+        requires:
+          - build
+      - test:
+        requires:
+          - build
       # For running simple node tests, you could optionally use the node/test job from the orb to replicate and replace the job above in fewer lines.
       # - node/test
