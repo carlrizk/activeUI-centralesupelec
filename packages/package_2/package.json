@@ -4,6 +4,6 @@
   "main": "index.ts",
   "license": "MIT",
   "scripts": {
-    "lint": "eslint"
+    "lint": "eslint && prettier --check ."
   }
 }
