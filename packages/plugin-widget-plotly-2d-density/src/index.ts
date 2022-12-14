@@ -1,0 +1,1 @@
+export { pluginWidgetMap } from "./pluginWidgetMap";

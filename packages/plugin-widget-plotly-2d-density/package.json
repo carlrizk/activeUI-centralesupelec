@@ -1,0 +1,19 @@
+{
+  "name": "@activeui-cs/plugin-widget-plotly-2d-density",
+  "version": "0.0.1",
+  "license": "MIT",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "activeui-sdk-scripts build",
+    "lint": "activeui-sdk-scripts lint",
+    "start": "activeui-sdk-scripts start"
+  },
+  "devDependencies": {
+    "@activeviam/activeui-sdk-scripts": "5.0.19"
+  }
+}
