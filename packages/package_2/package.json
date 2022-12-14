@@ -1,9 +1,0 @@
-{
-  "name": "@activeui-cs/package_2",
-  "version": "0.0.1",
-  "main": "index.ts",
-  "license": "MIT",
-  "scripts": {
-    "lint": "eslint && prettier --check ."
-  }
-}
