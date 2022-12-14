@@ -20,6 +20,11 @@ jobs:
     steps:
       # Checkout the code as the first step.
       - checkout
+      - run:
+          name: Set Registry
+          command: |
+            npm config set //activeviam.jfrog.io/artifactory/api/npm/activeui-npm-release/:_authToken=$ACTIVEVIAM_TOKEN
+            npm config set @activeviam:registry=https://activeviam.jfrog.io/artifactory/api/npm/activeui-npm-release/
       # Next, the node orb's install-packages step will install the dependencies from a package.json.
       # The orb install-packages step will also automatically cache them for faster future runs.
       - node/install-packages:
