@@ -60,7 +60,7 @@ import {
   pluginWidgetTable,
   pluginWidgetTreeTable,
 } from "@activeviam/activeui-sdk";
-import { pluginWidgetMap } from "@activeui-cs/plugin-widget-plotly-2d-density";
+import { pluginWidgetPlotly2DDensity } from "@activeui-cs/plugin-widget-plotly-2d-density";
 
 const cellPlugins: Array<CellPlugin<any>> = [
   pluginCellTable,
@@ -104,7 +104,7 @@ const titleBarButtonPlugins: Array<TitleBarButtonPlugin<any>> = [
 
 // Order matters: it controls the order of the icons in the widget ribbons.
 const widgetPlugins: Array<WidgetPlugin<any, any>> = [
-  pluginWidgetMap,
+  pluginWidgetPlotly2DDensity,
   pluginWidgetPivotTable,
   pluginWidgetTreeTable,
   pluginWidgetTable,

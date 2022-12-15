@@ -1,1 +1,1 @@
-export { pluginWidgetMap } from "./pluginWidgetMap";
+export { pluginWidgetPlotly2DDensity } from "./pluginWidgetPlotly2DDensity";
