@@ -1,0 +1,1 @@
+export { pluginWidgetPlotlyBoxPlot } from "./pluginWidgetPlotlyBoxPlot";
