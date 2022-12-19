@@ -19,7 +19,8 @@
     "antd": "4.12.2",
     "lodash": "^4.17.15",
     "react": "^17.0.0",
-    "@activeui-cs/plugin-widget-plotly-2d-density": "0.0.1"
+    "@activeui-cs/plugin-widget-plotly-2d-density": "0.0.1",
+    "@activeui-cs/plugin-widget-plotly-box-plot": "0.0.1"
   },
   "devDependencies": {
     "@activeviam/browserslist-config-activeui": "5.0.19",
