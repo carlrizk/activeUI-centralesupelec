@@ -7,12 +7,12 @@ export const PlotlyBoxPlot: FC<WidgetPluginProps> = (props) => {
   const container = useRef<HTMLDivElement>(null);
   const { height, width } = useComponentSize(container);
 
-  var x = [];
-  var y0 = [];
-  var y1 = [];
-  var y2 = [];
+  let x = [];
+  let y0 = [];
+  let y1 = [];
+  let y2 = [];
 
-  for (var i = 0; i < 50; i++) {
+  for (let i = 0; i < 50; i++) {
     if (i < 25) {
       x[i] = "Day 1";
     } else {
