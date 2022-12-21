@@ -1,5 +1,5 @@
 {
-  "name": "@activeui-cs/plugin-widget-plotly-2d-density",
+  "name": "@activeui-cs/react-utils",
   "version": "0.0.1",
   "license": "MIT",
   "main": "dist/cjs/index.js",
@@ -14,8 +14,9 @@
     "start": "activeui-sdk-scripts start"
   },
   "dependencies": {
-    "@activeui-cs/react-utils": "0.0.1",
-    "@rehooks/component-size": "^1.0.3"
+    "@types/react-plotly.js": "^2.5.2",
+    "plotly.js": "^2.16.5",
+    "react-plotly.js": "^2.6.0"
   },
   "devDependencies": {
     "@activeviam/activeui-sdk-scripts": "5.0.19"

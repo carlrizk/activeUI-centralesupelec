@@ -1,7 +1,7 @@
+import { PlotBase } from "@activeui-cs/react-utils";
 import { WidgetPluginProps } from "@activeviam/activeui-sdk";
 import useComponentSize from "@rehooks/component-size";
 import React, { FC, useRef } from "react";
-import Plot from "react-plotly.js";
 
 export const PlotlyBoxPlot: FC<WidgetPluginProps> = (props) => {
   const container = useRef<HTMLDivElement>(null);
@@ -32,7 +32,7 @@ export const PlotlyBoxPlot: FC<WidgetPluginProps> = (props) => {
         height: "100%",
       }}
     >
-      <Plot
+      <PlotBase
         data={[
           {
             x,

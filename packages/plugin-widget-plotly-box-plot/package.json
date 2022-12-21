@@ -14,10 +14,8 @@
     "start": "activeui-sdk-scripts start"
   },
   "dependencies": {
-    "@rehooks/component-size": "^1.0.3",
-    "@types/react-plotly.js": "^2.5.2",
-    "plotly.js": "^2.16.5",
-    "react-plotly.js": "^2.6.0"
+    "@activeui-cs/react-utils": "0.0.1",
+    "@rehooks/component-size": "^1.0.3"
   },
   "devDependencies": {
     "@activeviam/activeui-sdk-scripts": "5.0.19"
