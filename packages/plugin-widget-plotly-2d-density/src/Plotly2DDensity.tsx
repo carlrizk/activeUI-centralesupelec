@@ -1,7 +1,7 @@
 import { WidgetPluginProps } from "@activeviam/activeui-sdk";
 import useComponentSize from "@rehooks/component-size";
 import React, { FC, useRef } from "react";
-import Plot from "react-plotly.js";
+import { PlotBase } from "@activeui-cs/react-utils";
 
 function normal(): number {
   let x = 0;
@@ -42,7 +42,7 @@ export const Plotly2DDensity: FC<WidgetPluginProps> = (props) => {
         height: "100%",
       }}
     >
-      <Plot
+      <PlotBase
         data={[
           {
             x,
