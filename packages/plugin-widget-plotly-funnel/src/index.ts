@@ -1,0 +1,1 @@
+export { pluginWidgetPlotlyFunnel } from "./pluginWidgetPlotlyFunnel";

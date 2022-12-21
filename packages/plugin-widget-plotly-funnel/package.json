@@ -1,0 +1,25 @@
+{
+  "name": "@activeui-cs/plugin-widget-plotly-funnel",
+  "version": "0.0.1",
+  "license": "MIT",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "activeui-sdk-scripts build",
+    "lint": "activeui-sdk-scripts lint",
+    "start": "activeui-sdk-scripts start"
+  },
+  "dependencies": {
+    "@rehooks/component-size": "^1.0.3",
+    "@types/react-plotly.js": "^2.5.2",
+    "plotly.js": "^2.16.5",
+    "react-plotly.js": "^2.6.0"
+  },
+  "devDependencies": {
+    "@activeviam/activeui-sdk-scripts": "5.0.19"
+  }
+}
