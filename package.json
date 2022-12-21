@@ -48,5 +48,8 @@
   },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "resolutions": {
+    "@types/react": "18.0.26"
+  }
 }
