@@ -1,39 +1,109 @@
-import { WidgetPluginProps } from "@activeviam/activeui-sdk";
-import useComponentSize from "@rehooks/component-size";
-import React, { FC, useRef } from "react";
 import { PlotBase } from "@activeui-cs/react-utils";
+import {
+  WidgetPluginProps,
+  useQueryResult,
+  CellSet,
+  stringify,
+} from "@activeviam/activeui-sdk";
+import useComponentSize from "@rehooks/component-size";
+import React, { FC, useMemo, useRef } from "react";
+import Spin from "antd/lib/spin";
+import { Plotly2DDensityWidgetState } from "./Plotly2DDensity.types";
+import { Plotly2DDensityData } from "./Plotly2DDensityData";
 
-function normal(): number {
-  let x = 0;
-  let y = 0;
-  let rds;
-  do {
-    x = Math.random() * 2 - 1;
-    y = Math.random() * 2 - 1;
-    rds = x * x + y * y;
-  } while (rds === 0 || rds > 1);
-  const c = Math.sqrt((-2 * Math.log(rds)) / rds); // Box-Muller transform
-  return x * c; // throw away extra sample y * c
-}
+export const Plotly2DDensity: FC<
+  WidgetPluginProps<Plotly2DDensityWidgetState>
+> = (props) => {
+  const { mdx } = props.widgetState.query;
+  const stringifiedMdx = useMemo(() => stringify(mdx), [mdx]);
 
-export const Plotly2DDensity: FC<WidgetPluginProps> = (props) => {
-  const N = 200;
-  const a = -1;
-  const b = 1.2;
-  const step = (b - a) / (N - 1);
+  const { data, error, isLoading } = useQueryResult({
+    serverKey: "Ranch 6.0",
+    queryId: props.queryId,
+    query: {
+      mdx: stringifiedMdx,
+    },
+  });
 
-  const x: number[] = new Array<number>(N);
-  const y: number[] = new Array<number>(N);
-  const t: number[] = new Array<number>(N);
+  const extractData = (data?: CellSet): Plotly2DDensityData[] => {
+    if (data == null) return [];
 
-  for (let i = 0; i < N; i++) {
-    t[i] = a + step * i;
-    x[i] = Math.pow(t[i], 3) + 0.3 * normal();
-    y[i] = Math.pow(t[i], 6) + 0.3 * normal();
-  }
+    const result: Plotly2DDensityData[] = [];
+
+    const columnsAxis = data.axes[0];
+    const measures = columnsAxis.positions.map(
+      (position) => position[0].captionPath[0]
+    );
+
+    if (measures.length === 0) return [];
+    if (measures.length > 2) return [];
+
+    const values: number[][] = new Array(measures.length);
+    for (let i = 0; i < values.length; i++) {
+      values[i] = [];
+    }
+
+    // Start at measures.length because the first values are total
+    // TODO: Ask about this
+    for (let i = measures.length; i < data.cells.length; i++) {
+      if (i % measures.length === 0) {
+        values[0].push(data.cells[i].value as number);
+      } else {
+        values[1].push(data.cells[i].value as number);
+      }
+    }
+
+    for (let i = 0; i < measures.length; i++) {
+      result.push({
+        label: measures[i],
+        values: values[i],
+      });
+    }
+
+    return result;
+  };
+
+  const extractedData = extractData(data);
+  const plotData: Plotly.Data[] = [
+    {
+      x: extractedData.length >= 1 ? extractedData[0].values : [],
+      y: extractedData.length === 2 ? extractedData[1].values : [],
+      mode: "markers",
+      name: "Points",
+      marker: {
+        color: "rgb(102,0,0)",
+        size: 2,
+        opacity: 0.4,
+      },
+      type: "scatter",
+    },
+    {
+      x: extractedData.length >= 1 ? extractedData[0].values : [],
+      y: extractedData.length === 2 ? extractedData[1].values : [],
+      name: "density",
+      ncontours: 20,
+      colorscale: "Hot",
+      reversescale: true,
+      showscale: false,
+      type: "histogram2dcontour",
+    },
+    {
+      x: extractedData.length >= 1 ? extractedData[0].values : [],
+      name: extractedData.length >= 1 ? extractedData[0].label : "",
+      yaxis: "y2",
+      type: "histogram",
+    },
+    {
+      y: extractedData.length === 2 ? extractedData[1].values : [],
+      name: extractedData.length === 2 ? extractedData[1].label : "",
+      xaxis: "x2",
+      type: "histogram",
+    },
+  ];
 
   const container = useRef<HTMLDivElement>(null);
   const { height, width } = useComponentSize(container);
+
   return (
     <div
       ref={container}
@@ -42,74 +112,42 @@ export const Plotly2DDensity: FC<WidgetPluginProps> = (props) => {
         height: "100%",
       }}
     >
-      <PlotBase
-        data={[
-          {
-            x,
-            y,
-            mode: "markers",
-            name: "points",
-            marker: {
-              color: "rgb(102,0,0)",
-              size: 2,
-              opacity: 0.4,
+      {error != null ? (
+        <div>{error.stackTrace}</div>
+      ) : isLoading ? (
+        <Spin />
+      ) : (
+        <PlotBase
+          data={plotData}
+          layout={{
+            showlegend: true,
+            hovermode: "closest",
+            bargap: 0,
+            width: width - 25,
+            height,
+            xaxis: {
+              domain: [0, 0.85],
+              showgrid: false,
+              zeroline: false,
             },
-            type: "scatter",
-          },
-          {
-            x,
-            y,
-            name: "density",
-            ncontours: 20,
-            colorscale: "Hot",
-            reversescale: true,
-            showscale: false,
-            type: "histogram2dcontour",
-          },
-          {
-            x,
-            name: "x density",
-            marker: { color: "rgb(102,0,0)" },
-            yaxis: "y2",
-            type: "histogram",
-          },
-          {
-            y,
-            name: "y density",
-            marker: { color: "rgb(102,0,0)" },
-            xaxis: "x2",
-            type: "histogram",
-          },
-        ]}
-        layout={{
-          showlegend: false,
-          width,
-          height,
-          margin: { t: 50 },
-          hovermode: "closest",
-          bargap: 0,
-          xaxis: {
-            domain: [0, 0.85],
-            showgrid: false,
-            zeroline: false,
-          },
-          yaxis: {
-            domain: [0, 0.85],
-            showgrid: false,
-            zeroline: false,
-          },
-          xaxis2: {
-            domain: [0.85, 1],
-            showgrid: false,
-            zeroline: false,
-          },
-          yaxis2: {
-            domain: [0.85, 1],
-            showgrid: false,
-            zeroline: false,
-          },
-        }}
-      />
+            yaxis: {
+              domain: [0, 0.85],
+              showgrid: false,
+              zeroline: false,
+            },
+            xaxis2: {
+              domain: [0.85, 1],
+              showgrid: false,
+              zeroline: false,
+            },
+            yaxis2: {
+              domain: [0.85, 1],
+              showgrid: false,
+              zeroline: false,
+            },
+          }}
+        />
+      )}
     </div>
   );
 };
