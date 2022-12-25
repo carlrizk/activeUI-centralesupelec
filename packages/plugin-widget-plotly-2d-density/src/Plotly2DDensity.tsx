@@ -49,10 +49,14 @@ export const Plotly2DDensity = withQueryResult<Plotly2DDensityWidgetState>(
     };
 
     const extractedData = extractData(data);
+
+    const x = extractedData.length >= 1 ? extractedData[0].values : [];
+    const y = extractedData.length === 2 ? extractedData[1].values : [];
+
     const plotData: Plotly.Data[] = [
       {
-        x: extractedData.length >= 1 ? extractedData[0].values : [],
-        y: extractedData.length === 2 ? extractedData[1].values : [],
+        x,
+        y,
         mode: "markers",
         name: "Points",
         marker: {
@@ -61,25 +65,27 @@ export const Plotly2DDensity = withQueryResult<Plotly2DDensityWidgetState>(
           opacity: 0.4,
         },
         type: "scatter",
+        selectedpoints: undefined,
       },
       {
-        x: extractedData.length >= 1 ? extractedData[0].values : [],
-        y: extractedData.length === 2 ? extractedData[1].values : [],
+        x,
+        y,
         name: "density",
         ncontours: 20,
         colorscale: "Hot",
         reversescale: true,
         showscale: false,
         type: "histogram2dcontour",
+        selectedpoints: undefined,
       },
       {
-        x: extractedData.length >= 1 ? extractedData[0].values : [],
+        x,
         name: extractedData.length >= 1 ? extractedData[0].label : "",
         yaxis: "y2",
         type: "histogram",
       },
       {
-        y: extractedData.length === 2 ? extractedData[1].values : [],
+        y,
         name: extractedData.length === 2 ? extractedData[1].label : "",
         xaxis: "x2",
         type: "histogram",
