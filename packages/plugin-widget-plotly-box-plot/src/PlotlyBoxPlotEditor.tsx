@@ -5,7 +5,6 @@ import {
   useDataModel,
   Measure,
   getMeasures,
-  addMeasure,
   MdxFunction,
 } from "@activeviam/activeui-sdk";
 import { useIntl } from "react-intl";
@@ -23,20 +22,16 @@ export const PlotlyBoxPlotEditor: FC<EditorProps<PlotlyBoxPlotWidgetState>> = (
   const measuresNames = getMeasures(mdx).map((measure) => measure.measureName);
 
   const dataModel = useDataModel("Ranch 6.0");
-  const cube = dataModel ? dataModel.catalogs[0].cubes[0] : null;
+  const cube = dataModel.catalogs[0].cubes[0];
 
-  const measures = (cube ? cube.measures : []).map((measure) => ({
+  const measures = cube.measures.map((measure) => ({
     ...measure,
     isDisabled: measuresNames.includes(measure.name),
   }));
 
-  const handleMeasureClicked = (measure: Measure & { isDisabled: boolean }) => {
-    if (!cube) {
-      // This should normally not happen.
-      // But if it does, then abort mission.
-      return;
-    }
-
+  const handleMeasureClicked = (
+    measure: Measure & { isDisabled: boolean }
+  ): void => {
     const newMdx = cloneDeep(mdx);
     const expression = newMdx.axes[1].expression as MdxFunction;
     expression.arguments.push(createMeasureCompoundIdentifier(measure.name));

@@ -33,7 +33,7 @@ export const PlotlyBoxPlot: FC<WidgetPluginProps<PlotlyBoxPlotWidgetState>> = (
     const measures = columnsAxis.positions.map(
       (position) => position[0].captionPath[0]
     );
-    console.log("Labels: ", measures);
+    // console.log("Labels: ", measures);
 
     if (measures.length === 0) return [];
     console.log("Data inside: ", data);
@@ -43,7 +43,7 @@ export const PlotlyBoxPlot: FC<WidgetPluginProps<PlotlyBoxPlotWidgetState>> = (
       values[i] = [];
     }
 
-    console.log("Values: ", values);
+    // console.log("Values: ", values);
 
     for (let i = measures.length; i < data.cells.length; i++) {
       values[i % measures.length].push(data.cells[i].value as number);
