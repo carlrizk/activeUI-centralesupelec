@@ -1,46 +1,61 @@
 import {
   CellSetSelection,
+  DataVisualizationContentEditor,
+  DataVisualizationQueryEditor,
   FiltersEditor,
-  MdxSelect,
-  parse,
+  PlotlyWidgetState,
   WidgetPlugin,
 } from "@activeviam/activeui-sdk";
 import { IconWorld } from "./IconWorld";
 
 import { Plotly2DDensity } from "./Plotly2DDensity";
-import { Plotly2DDensityWidgetState } from "./Plotly2DDensity.types";
-import { Plotly2DDensityEditor } from "./Plotly2DDensityEditor";
 
 const widgetKey = "2d-density";
 
+// TODO Change max number of fields accordingly
 export const pluginWidgetPlotly2DDensity: WidgetPlugin<
-  Plotly2DDensityWidgetState,
+  PlotlyWidgetState,
   CellSetSelection
 > = {
+  key: widgetKey,
+  category: "dataVisualization",
+  attributes: {
+    horizontalSubplots: {
+      role: "subplot",
+      maxNumberOfFields: 1,
+    },
+    horizontalMeasures: {
+      role: "primaryNumeric",
+      maxNumberOfFields: 1,
+    },
+    verticalSubplots: {
+      role: "subplot",
+      maxNumberOfFields: 1,
+    },
+    verticalMeasures: {
+      role: "primaryNumeric",
+      maxNumberOfFields: 1,
+    },
+  },
   Component: Plotly2DDensity,
-  contentEditor: Plotly2DDensityEditor,
+  contentEditor: DataVisualizationContentEditor,
+  contextMenuItems: [],
+  doesSupportMeasuresRedirection: true,
   filtersEditor: FiltersEditor,
   Icon: IconWorld,
   initialState: {
     widgetKey,
-    serverKey: "Ranch 6.0",
-    query: {
-      mdx: parse<MdxSelect>(`
-        SELECT
-          NON EMPTY
-            Descendants(
-              {
-                [Trades].[Trades]
-              },
-              1,
-              SELF_AND_BEFORE
-            ) ON ROWS
-          FROM [EquityDerivativesCube]
-          CELL PROPERTIES VALUE
-      `),
+    mapping: {
+      horizontalSubplots: [],
+      horizontalMeasures: [],
+      verticalSubplots: [],
+      verticalMeasures: [],
     },
+    query: {},
   },
-  key: widgetKey,
+  menuItems: [],
+  queryEditor: DataVisualizationQueryEditor,
+  titleBarButtons: [],
   translations: {
     "en-US": {
       key: "2D Density",
