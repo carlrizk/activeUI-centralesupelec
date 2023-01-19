@@ -1,8 +1,8 @@
 import { PlotBase } from "@activeui-cs/react-utils";
 import { CellSet, withQueryResult } from "@activeviam/activeui-sdk";
 import useComponentSize from "@rehooks/component-size";
+import { Spin } from "antd";
 import React, { useRef } from "react";
-import Spin from "antd/lib/spin";
 import { Plotly2DDensityWidgetState } from "./Plotly2DDensity.types";
 import { Plotly2DDensityData } from "./Plotly2DDensityData";
 
@@ -12,7 +12,6 @@ export const Plotly2DDensity = withQueryResult<Plotly2DDensityWidgetState>(
 
     const extractData = (data?: CellSet): Plotly2DDensityData[] => {
       if (data == null) return [];
-
       const result: Plotly2DDensityData[] = [];
 
       const columnsAxis = data.axes[0];

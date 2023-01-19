@@ -34,9 +34,7 @@ export const pluginWidgetPlotly2DDensity: WidgetPlugin<
               },
               1,
               SELF_AND_BEFORE
-            ) ON ROWS,
-          NON EMPTY {
-          } ON COLUMNS
+            ) ON ROWS
           FROM [EquityDerivativesCube]
           CELL PROPERTIES VALUE
       `),

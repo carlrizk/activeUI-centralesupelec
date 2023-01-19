@@ -1,14 +1,12 @@
-import React, { FC } from "react";
 import {
+  addMeasure,
   EditorProps,
-  useDataModel,
-  Tree,
-  Measure,
   getMeasures,
-  MdxFunction,
+  Measure,
+  Tree,
+  useDataModel,
 } from "@activeviam/activeui-sdk";
-import { createMeasureCompoundIdentifier } from "@activeviam/mdx";
-import { cloneDeep } from "lodash";
+import React, { FC } from "react";
 
 import { useIntl } from "react-intl";
 import { Plotly2DDensityWidgetState } from "./Plotly2DDensity.types";
@@ -38,9 +36,10 @@ export const Plotly2DDensityEditor: FC<
       return;
     }
 
-    const newMdx = cloneDeep(mdx);
-    const expression = newMdx.axes[1].expression as MdxFunction;
-    expression.arguments.push(createMeasureCompoundIdentifier(measure.name));
+    const newMdx = addMeasure(mdx, {
+      cube,
+      measureName: measure.name,
+    });
 
     props.onWidgetChange({
       ...props.widgetState,

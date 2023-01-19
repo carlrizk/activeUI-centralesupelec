@@ -15,17 +15,15 @@
   },
   "dependencies": {
     "@activeui-cs/react-utils": "0.0.1",
-    "@activeviam/activeui-scripts": "5.0.19",
-    "@activeviam/activeui-sdk": "5.0.19",
-    "@activeviam/mdx": "5.0.19",
+    "@activeviam/activeui-scripts": "5.0.20",
+    "@activeviam/activeui-sdk": "5.0.20",
     "@rehooks/component-size": "^1.0.3",
     "@types/plotly.js": "2.12.11",
     "antd": "4.12.2",
-    "lodash": "^4.17.15",
     "react": "^17.0.0",
     "react-intl": "6.2.5"
   },
   "devDependencies": {
-    "@activeviam/activeui-sdk-scripts": "5.0.19"
+    "@activeviam/activeui-sdk-scripts": "5.0.20"
   }
 }
