@@ -20,21 +20,13 @@ export const pluginWidgetPlotly2DDensity: WidgetPlugin<
   key: widgetKey,
   category: "dataVisualization",
   attributes: {
-    horizontalSubplots: {
-      role: "subplot",
-      maxNumberOfFields: 1,
+    xAxis: {
+      role: "primaryOrdinal",
+      isMainAxis: true,
     },
-    horizontalMeasures: {
+    values: {
       role: "primaryNumeric",
-      maxNumberOfFields: 1,
-    },
-    verticalSubplots: {
-      role: "subplot",
-      maxNumberOfFields: 1,
-    },
-    verticalMeasures: {
-      role: "primaryNumeric",
-      maxNumberOfFields: 1,
+      maxNumberOfFields: 2,
     },
   },
   Component: Plotly2DDensity,
@@ -46,10 +38,8 @@ export const pluginWidgetPlotly2DDensity: WidgetPlugin<
   initialState: {
     widgetKey,
     mapping: {
-      horizontalSubplots: [],
-      horizontalMeasures: [],
-      verticalSubplots: [],
-      verticalMeasures: [],
+      xAxis: [],
+      values: [],
     },
     query: {},
   },
