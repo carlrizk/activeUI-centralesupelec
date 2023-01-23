@@ -22,6 +22,7 @@ export const pluginWidgetPlotly2DDensity: WidgetPlugin<
     xAxis: {
       role: "primaryOrdinal",
       isMainAxis: true,
+      maxNumberOfFields: 1,
     },
     values: {
       role: "primaryNumeric",

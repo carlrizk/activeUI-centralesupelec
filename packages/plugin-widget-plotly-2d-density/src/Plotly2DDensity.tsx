@@ -7,45 +7,37 @@ import {
 import useComponentSize from "@rehooks/component-size";
 import { Spin } from "antd";
 import React, { useRef } from "react";
-import { Plotly2DDensityData } from "./Plotly2DDensityData";
+import { MeasureData } from "./MeasureData";
 
 export const Plotly2DDensity = withQueryResult<PlotlyWidgetState>((props) => {
   const { isLoading, data, error } = props.queryResult;
 
-  const extractData = (data?: CellSet): Plotly2DDensityData[] => {
+  const extractData = (data?: CellSet): MeasureData[] => {
     if (data == null) return [];
 
-    const result: Plotly2DDensityData[] = [];
+    const columnsAxis = data.axes.at(0);
+    const rowAxis = data.axes.at(1);
 
-    const columnsAxis = data.axes[0];
-    const measures = columnsAxis.positions.map(
-      (position) => position[0].captionPath[0]
-    );
-
-    if (measures.length === 0) return [];
-    if (measures.length > 2) return [];
-
-    const values: number[][] = new Array(measures.length);
-    for (let i = 0; i < values.length; i++) {
-      values[i] = [];
+    if (columnsAxis === undefined || rowAxis === undefined) {
+      return [];
     }
+    const columnCount = columnsAxis.positions.length;
+    // const rowCount = rowAxis.positions.length;
 
-    for (let i = measures.length; i < data.cells.length; i++) {
-      if (i % measures.length === 0) {
-        values[0].push(data.cells[i].value as number);
-      } else {
-        values[1].push(data.cells[i].value as number);
-      }
-    }
+    const sums = data.cells.slice(0, columnCount);
+    const values = data.cells.slice(columnCount);
 
-    for (let i = 0; i < measures.length; i++) {
-      result.push({
-        label: measures[i],
-        values: values[i],
-      });
-    }
-
-    return result;
+    return columnsAxis.positions.map((measure, measureIndex) => {
+      return {
+        measureName: measure[0].captionPath[0],
+        sum: sums[measureIndex].value as number,
+        values: values
+          .filter((value) => {
+            return value.ordinal % columnCount === measureIndex;
+          })
+          .map((value) => value.value as number),
+      };
+    });
   };
 
   const extractedData = extractData(data);
@@ -80,13 +72,13 @@ export const Plotly2DDensity = withQueryResult<PlotlyWidgetState>((props) => {
     },
     {
       x,
-      name: extractedData.length >= 1 ? extractedData[0].label : "",
+      name: extractedData.length >= 1 ? extractedData[0].measureName : "",
       yaxis: "y2",
       type: "histogram",
     },
     {
       y,
-      name: extractedData.length === 2 ? extractedData[1].label : "",
+      name: extractedData.length === 2 ? extractedData[1].measureName : "",
       xaxis: "x2",
       type: "histogram",
     },
