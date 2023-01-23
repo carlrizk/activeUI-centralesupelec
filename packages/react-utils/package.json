@@ -14,11 +14,12 @@
     "start": "activeui-sdk-scripts start"
   },
   "dependencies": {
-    "@types/react-plotly.js": "^2.5.2",
-    "plotly.js": "^2.16.5",
+    "plotly.js": "^2.18.0",
     "react-plotly.js": "^2.6.0"
   },
   "devDependencies": {
-    "@activeviam/activeui-sdk-scripts": "5.0.19"
+    "@activeviam/activeui-sdk-scripts": "5.0.20",
+    "@types/plotly.js": "2.12.13",
+    "@types/react-plotly.js": "^2.6.0"
   }
 }
