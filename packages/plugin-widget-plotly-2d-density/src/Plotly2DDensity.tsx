@@ -1,39 +1,92 @@
-import { WidgetPluginProps } from "@activeviam/activeui-sdk";
-import useComponentSize from "@rehooks/component-size";
-import React, { FC, useRef } from "react";
 import { PlotBase } from "@activeui-cs/react-utils";
+import {
+  CellSet,
+  PlotlyWidgetState,
+  withQueryResult,
+} from "@activeviam/activeui-sdk";
+import useComponentSize from "@rehooks/component-size";
+import { Spin } from "antd";
+import React, { useRef } from "react";
+import { MeasureData } from "./MeasureData";
 
-function normal(): number {
-  let x = 0;
-  let y = 0;
-  let rds;
-  do {
-    x = Math.random() * 2 - 1;
-    y = Math.random() * 2 - 1;
-    rds = x * x + y * y;
-  } while (rds === 0 || rds > 1);
-  const c = Math.sqrt((-2 * Math.log(rds)) / rds); // Box-Muller transform
-  return x * c; // throw away extra sample y * c
-}
+export const Plotly2DDensity = withQueryResult<PlotlyWidgetState>((props) => {
+  const { isLoading, data, error } = props.queryResult;
 
-export const Plotly2DDensity: FC<WidgetPluginProps> = (props) => {
-  const N = 200;
-  const a = -1;
-  const b = 1.2;
-  const step = (b - a) / (N - 1);
+  const extractData = (data?: CellSet): MeasureData[] => {
+    if (data == null) return [];
 
-  const x: number[] = new Array<number>(N);
-  const y: number[] = new Array<number>(N);
-  const t: number[] = new Array<number>(N);
+    const columnsAxis = data.axes.at(0);
+    const rowAxis = data.axes.at(1);
 
-  for (let i = 0; i < N; i++) {
-    t[i] = a + step * i;
-    x[i] = Math.pow(t[i], 3) + 0.3 * normal();
-    y[i] = Math.pow(t[i], 6) + 0.3 * normal();
-  }
+    if (columnsAxis === undefined || rowAxis === undefined) {
+      return [];
+    }
+    const columnCount = columnsAxis.positions.length;
+    // const rowCount = rowAxis.positions.length;
+
+    const sums = data.cells.slice(0, columnCount);
+    const values = data.cells.slice(columnCount);
+
+    return columnsAxis.positions.map((measure, measureIndex) => {
+      return {
+        measureName: measure[0].captionPath[0],
+        sum: sums[measureIndex].value as number,
+        values: values
+          .filter((value) => {
+            return value.ordinal % columnCount === measureIndex;
+          })
+          .map((value) => value.value as number),
+      };
+    });
+  };
+
+  const extractedData = extractData(data);
+
+  const x = extractedData.length >= 1 ? extractedData[0].values : [];
+  const y = extractedData.length === 2 ? extractedData[1].values : [];
+
+  const plotData: Plotly.Data[] = [
+    {
+      x,
+      y,
+      mode: "markers",
+      name: "Points",
+      marker: {
+        color: "rgb(102,0,0)",
+        size: 2,
+        opacity: 0.4,
+      },
+      type: "scatter",
+      selectedpoints: undefined,
+    },
+    {
+      x,
+      y,
+      name: "density",
+      ncontours: 20,
+      colorscale: "Hot",
+      reversescale: true,
+      showscale: false,
+      type: "histogram2dcontour",
+      selectedpoints: undefined,
+    },
+    {
+      x,
+      name: extractedData.length >= 1 ? extractedData[0].measureName : "",
+      yaxis: "y2",
+      type: "histogram",
+    },
+    {
+      y,
+      name: extractedData.length === 2 ? extractedData[1].measureName : "",
+      xaxis: "x2",
+      type: "histogram",
+    },
+  ];
 
   const container = useRef<HTMLDivElement>(null);
   const { height, width } = useComponentSize(container);
+
   return (
     <div
       ref={container}
@@ -42,74 +95,42 @@ export const Plotly2DDensity: FC<WidgetPluginProps> = (props) => {
         height: "100%",
       }}
     >
-      <PlotBase
-        data={[
-          {
-            x,
-            y,
-            mode: "markers",
-            name: "points",
-            marker: {
-              color: "rgb(102,0,0)",
-              size: 2,
-              opacity: 0.4,
+      {error != null ? (
+        <div>{error.stackTrace}</div>
+      ) : isLoading ? (
+        <Spin />
+      ) : (
+        <PlotBase
+          data={plotData}
+          layout={{
+            showlegend: true,
+            hovermode: "closest",
+            bargap: 0,
+            width: width - 25,
+            height,
+            xaxis: {
+              domain: [0, 0.85],
+              showgrid: false,
+              zeroline: false,
             },
-            type: "scatter",
-          },
-          {
-            x,
-            y,
-            name: "density",
-            ncontours: 20,
-            colorscale: "Hot",
-            reversescale: true,
-            showscale: false,
-            type: "histogram2dcontour",
-          },
-          {
-            x,
-            name: "x density",
-            marker: { color: "rgb(102,0,0)" },
-            yaxis: "y2",
-            type: "histogram",
-          },
-          {
-            y,
-            name: "y density",
-            marker: { color: "rgb(102,0,0)" },
-            xaxis: "x2",
-            type: "histogram",
-          },
-        ]}
-        layout={{
-          showlegend: false,
-          width,
-          height,
-          margin: { t: 50 },
-          hovermode: "closest",
-          bargap: 0,
-          xaxis: {
-            domain: [0, 0.85],
-            showgrid: false,
-            zeroline: false,
-          },
-          yaxis: {
-            domain: [0, 0.85],
-            showgrid: false,
-            zeroline: false,
-          },
-          xaxis2: {
-            domain: [0.85, 1],
-            showgrid: false,
-            zeroline: false,
-          },
-          yaxis2: {
-            domain: [0.85, 1],
-            showgrid: false,
-            zeroline: false,
-          },
-        }}
-      />
+            yaxis: {
+              domain: [0, 0.85],
+              showgrid: false,
+              zeroline: false,
+            },
+            xaxis2: {
+              domain: [0.85, 1],
+              showgrid: false,
+              zeroline: false,
+            },
+            yaxis2: {
+              domain: [0.85, 1],
+              showgrid: false,
+              zeroline: false,
+            },
+          }}
+        />
+      )}
     </div>
   );
-};
+});
