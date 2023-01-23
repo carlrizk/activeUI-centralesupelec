@@ -12,7 +12,6 @@ import { Plotly2DDensity } from "./Plotly2DDensity";
 
 const widgetKey = "2d-density";
 
-// TODO Change max number of fields accordingly
 export const pluginWidgetPlotly2DDensity: WidgetPlugin<
   PlotlyWidgetState,
   CellSetSelection

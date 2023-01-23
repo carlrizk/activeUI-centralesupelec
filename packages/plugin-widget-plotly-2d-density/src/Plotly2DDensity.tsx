@@ -30,8 +30,6 @@ export const Plotly2DDensity = withQueryResult<PlotlyWidgetState>((props) => {
       values[i] = [];
     }
 
-    // Start at measures.length because the first values are total
-    // TODO: Ask about this
     for (let i = measures.length; i < data.cells.length; i++) {
       if (i % measures.length === 0) {
         values[0].push(data.cells[i].value as number);
