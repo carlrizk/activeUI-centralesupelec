@@ -1,51 +1,19 @@
-import { PlotBase } from "@activeui-cs/react-utils";
-import {
-  CellSet,
-  PlotlyWidgetState,
-  withQueryResult,
-} from "@activeviam/activeui-sdk";
+import { extractData } from "@activeui-cs/common";
+import { Data as PlotData, PlotBase } from "@activeui-cs/react-utils";
+import { PlotlyWidgetState, withQueryResult } from "@activeviam/activeui-sdk";
 import useComponentSize from "@rehooks/component-size";
 import { Spin } from "antd";
 import React, { useRef } from "react";
-import { MeasureData } from "./MeasureData";
 
 export const Plotly2DDensity = withQueryResult<PlotlyWidgetState>((props) => {
   const { isLoading, data, error } = props.queryResult;
-
-  const extractData = (data?: CellSet): MeasureData[] => {
-    if (data == null) return [];
-
-    const columnsAxis = data.axes.at(0);
-    const rowAxis = data.axes.at(1);
-
-    if (columnsAxis === undefined || rowAxis === undefined) {
-      return [];
-    }
-    const columnCount = columnsAxis.positions.length;
-    // const rowCount = rowAxis.positions.length;
-
-    const sums = data.cells.slice(0, columnCount);
-    const values = data.cells.slice(columnCount);
-
-    return columnsAxis.positions.map((measure, measureIndex) => {
-      return {
-        measureName: measure[0].captionPath[0],
-        sum: sums[measureIndex].value as number,
-        values: values
-          .filter((value) => {
-            return value.ordinal % columnCount === measureIndex;
-          })
-          .map((value) => value.value as number),
-      };
-    });
-  };
 
   const extractedData = extractData(data);
 
   const x = extractedData.length >= 1 ? extractedData[0].values : [];
   const y = extractedData.length === 2 ? extractedData[1].values : [];
 
-  const plotData: Plotly.Data[] = [
+  const plotData: PlotData[] = [
     {
       x,
       y,
@@ -63,7 +31,6 @@ export const Plotly2DDensity = withQueryResult<PlotlyWidgetState>((props) => {
       x,
       y,
       name: "density",
-      ncontours: 20,
       colorscale: "Hot",
       reversescale: true,
       showscale: false,
