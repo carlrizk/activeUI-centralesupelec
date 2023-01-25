@@ -33,7 +33,7 @@
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.31.11",
     "husky": "^8.0.1",
-    "lerna": "^6.0.3",
+    "lerna": "^6.4.1",
     "lint-staged": "^13.0.3",
     "prettier": "2.7.1",
     "typescript": "*"
@@ -50,6 +50,6 @@
     "packages/*"
   ],
   "resolutions": {
-    "@types/react": "18.0.26"
+    "@types/react": "^18.0.27"
   }
 }
