@@ -1,48 +1,50 @@
 import {
-  MdxSelect,
-  parse,
   WidgetPlugin,
   CellSetSelection,
+  DataVisualizationContentEditor,
+  DataVisualizationQueryEditor,
   FiltersEditor,
+  PlotlyWidgetState,
 } from "@activeviam/activeui-sdk";
 import { IconWorld } from "./IconWorld";
-import { PlotlyBoxPlotWidgetState } from "./PlotlyBoxPlot.types";
-
 import { PlotlyBoxPlot } from "./PlotlyBoxPlot";
-import { PlotlyBoxPlotEditor } from "./PlotlyBoxPlotEditor";
 
 const widgetKey = "box-plot";
 
+//Category and mapping
 export const pluginWidgetPlotlyBoxPlot: WidgetPlugin<
-  PlotlyBoxPlotWidgetState,
+  PlotlyWidgetState,
   CellSetSelection
 > = {
-  Component: PlotlyBoxPlot,
-  contentEditor: PlotlyBoxPlotEditor,
-  Icon: IconWorld,
-  filtersEditor: FiltersEditor,
-  initialState: {
-    widgetKey,
-    serverKey: "Ranch 6.0",
-    query: {
-      mdx: parse<MdxSelect>(`
-        SELECT
-          NON EMPTY
-            Descendants(
-              {
-                [Trades].[Trades]
-              },
-              1,
-              SELF_AND_BEFORE
-            ) ON ROWS,
-          NON EMPTY {
-          } ON COLUMNS
-          FROM [EquityDerivativesCube]
-          CELL PROPERTIES VALUE
-      `),
+  key: widgetKey,
+  category: "dataVisualization",
+  attributes: {
+    xAxis: {
+      role: "primaryOrdinal",
+      isMainAxis: true,
+    },
+    values: {
+      role: "primaryNumeric",
+      //maxNumberOfFields: 2,
     },
   },
-  key: widgetKey,
+  Component: PlotlyBoxPlot,
+  contentEditor: DataVisualizationContentEditor,
+  contextMenuItems: [],
+  doesSupportMeasuresRedirection: true,
+  filtersEditor: FiltersEditor,
+  Icon: IconWorld,
+  initialState: {
+    widgetKey,
+    mapping: {
+      xaxis: [],
+      values: [],
+    },
+    query: {},
+  },
+  menuItems: [],
+  queryEditor: DataVisualizationQueryEditor,
+  titleBarButtons: [],
   translations: {
     "en-US": {
       key: "Box Plot",
