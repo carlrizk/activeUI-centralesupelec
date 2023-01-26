@@ -9,9 +9,9 @@ import {
 import { IconWorld } from "./IconWorld";
 import { PlotlyBoxPlot } from "./PlotlyBoxPlot";
 
-const widgetKey = "box-plot";
+const widgetKey = "plotly-box-plot";
 
-//Category and mapping
+// Category and mapping
 export const pluginWidgetPlotlyBoxPlot: WidgetPlugin<
   PlotlyWidgetState,
   CellSetSelection
@@ -25,7 +25,7 @@ export const pluginWidgetPlotlyBoxPlot: WidgetPlugin<
     },
     values: {
       role: "primaryNumeric",
-      //maxNumberOfFields: 2,
+      // maxNumberOfFields: 2,
     },
   },
   Component: PlotlyBoxPlot,

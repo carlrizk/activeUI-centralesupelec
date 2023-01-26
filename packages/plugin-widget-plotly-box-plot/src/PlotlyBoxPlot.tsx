@@ -5,6 +5,9 @@ import React, { useRef } from "react";
 import { Spin } from "antd";
 import { extractData } from "@activeui-cs/common";
 
+/**
+ * Outputs the boxplot widget
+ */
 export const PlotlyBoxPlot = withQueryResult<PlotlyWidgetState>((props) => {
   const { data, error, isLoading } = props.queryResult;
 
@@ -34,9 +37,9 @@ export const PlotlyBoxPlot = withQueryResult<PlotlyWidgetState>((props) => {
         <PlotBase
           data={plotData}
           layout={{
-            showlegend: false,
+            showlegend: true,
             height,
-            width,
+            width: width - 25,
             boxmode: "group",
           }}
         />
