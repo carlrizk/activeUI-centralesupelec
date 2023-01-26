@@ -19,6 +19,6 @@
     "react-intl": "^6.2.5"
   },
   "devDependencies": {
-    "@activeviam/activeui-sdk-scripts": "5.0.19"
+    "@activeviam/activeui-sdk-scripts": "5.0.20"
   }
 }
