@@ -1,118 +1,112 @@
 import { extractData } from "@activeui-cs/common";
 import { Data as PlotData, PlotBase } from "@activeui-cs/react-utils";
-import {
-  WidgetWithQueryProps,
-  withQueryResult,
-} from "@activeviam/activeui-sdk";
-import { PlotlyWidgetState, withoutIrrelevantRenders } from "@activeviam/chart";
+import { WidgetWithQueryProps } from "@activeviam/activeui-sdk";
+import { PlotlyWidgetState } from "@activeviam/chart";
 import useComponentSize from "@rehooks/component-size";
-import React, { memo, useRef } from "react";
+import React, { useRef } from "react";
 
-export const Plotly2DDensity = withQueryResult(
-  withoutIrrelevantRenders(
-    memo((props: WidgetWithQueryProps<PlotlyWidgetState>) => {
-      const { data } = props.queryResult;
-      const extractedData = extractData(data);
+export const Plotly2DDensity = (
+  props: WidgetWithQueryProps<PlotlyWidgetState>
+): JSX.Element => {
+  const { data } = props.queryResult;
+  const extractedData = extractData(data);
 
-      const firstMeasure =
-        extractedData.length >= 1 ? extractedData[0].values : [];
-      const secondMeasure =
-        extractedData.length === 2 ? extractedData[1].values : [];
+  const firstMeasure = extractedData.length >= 1 ? extractedData[0].values : [];
+  const secondMeasure =
+    extractedData.length === 2 ? extractedData[1].values : [];
 
-      const showFirstMeasureAxis = firstMeasure.length > 0;
-      const showSecondMeasureAxis = secondMeasure.length > 0;
+  const showFirstMeasureAxis = firstMeasure.length > 0;
+  const showSecondMeasureAxis = secondMeasure.length > 0;
 
-      const plotData: PlotData[] = [
-        {
-          x: firstMeasure,
-          y: secondMeasure,
-          mode: "markers",
-          name: "Points",
-          marker: {
-            color: "rgb(102,0,0)",
-            size: 2,
-            opacity: 0.4,
+  const plotData: PlotData[] = [
+    {
+      x: firstMeasure,
+      y: secondMeasure,
+      mode: "markers",
+      name: "Points",
+      marker: {
+        color: "rgb(102,0,0)",
+        size: 2,
+        opacity: 0.4,
+      },
+      type: "scatter",
+    },
+    {
+      x: firstMeasure,
+      y: secondMeasure,
+      name: "density",
+      colorscale: "Hot",
+      reversescale: true,
+      showscale: false,
+      type: "histogram2dcontour",
+    },
+    {
+      x: firstMeasure,
+      name: extractedData.length >= 1 ? extractedData[0].measureName : "",
+      yaxis: "y2",
+      type: "histogram",
+    },
+    {
+      y: secondMeasure,
+      name: extractedData.length === 2 ? extractedData[1].measureName : "",
+      xaxis: "x2",
+      type: "histogram",
+    },
+  ];
+
+  const container = useRef<HTMLDivElement>(null);
+  const { height, width } = useComponentSize(container);
+
+  return (
+    <div
+      ref={container}
+      style={{
+        ...props.style,
+        height: "100%",
+        width: "100%",
+      }}
+    >
+      <PlotBase
+        data={plotData}
+        layout={{
+          showlegend: true,
+          hovermode: "closest",
+          width: width - 25,
+          height,
+          xaxis: {
+            domain: [0, 0.8],
+            zeroline: false,
+            showgrid: true,
+            automargin: true,
+            autotick: true,
+            visible: showFirstMeasureAxis,
           },
-          type: "scatter",
-        },
-        {
-          x: firstMeasure,
-          y: secondMeasure,
-          name: "density",
-          colorscale: "Hot",
-          reversescale: true,
-          showscale: false,
-          type: "histogram2dcontour",
-        },
-        {
-          x: firstMeasure,
-          name: extractedData.length >= 1 ? extractedData[0].measureName : "",
-          yaxis: "y2",
-          type: "histogram",
-        },
-        {
-          y: secondMeasure,
-          name: extractedData.length === 2 ? extractedData[1].measureName : "",
-          xaxis: "x2",
-          type: "histogram",
-        },
-      ];
-
-      const container = useRef<HTMLDivElement>(null);
-      const { height, width } = useComponentSize(container);
-
-      return (
-        <div
-          ref={container}
-          style={{
-            ...props.style,
-            height: "100%",
-            width: "100%",
-          }}
-        >
-          <PlotBase
-            data={plotData}
-            layout={{
-              showlegend: true,
-              hovermode: "closest",
-              width: width - 25,
-              height,
-              xaxis: {
-                domain: [0, 0.8],
-                zeroline: false,
-                showgrid: true,
-                automargin: true,
-                autotick: true,
-                visible: showFirstMeasureAxis,
-              },
-              yaxis: {
-                domain: [0, 0.8],
-                zeroline: false,
-                showgrid: true,
-                automargin: true,
-                autotick: true,
-                visible: showSecondMeasureAxis,
-              },
-              xaxis2: {
-                domain: [0.85, 1],
-                zeroline: false,
-                showgrid: true,
-                automargin: true,
-                autotick: true,
-                visible: showSecondMeasureAxis,
-              },
-              yaxis2: {
-                domain: [0.85, 1],
-                zeroline: false,
-                showgrid: true,
-                automargin: true,
-                autotick: true,
-                visible: showFirstMeasureAxis,
-              },
-            }}
-          />
-        </div>
-      );
-    })
-  )
-);
+          yaxis: {
+            domain: [0, 0.8],
+            zeroline: false,
+            showgrid: true,
+            automargin: true,
+            autotick: true,
+            visible: showSecondMeasureAxis,
+          },
+          xaxis2: {
+            domain: [0.85, 1],
+            zeroline: false,
+            showgrid: true,
+            automargin: true,
+            autotick: true,
+            visible: showSecondMeasureAxis,
+          },
+          yaxis2: {
+            domain: [0.85, 1],
+            zeroline: false,
+            showgrid: true,
+            automargin: true,
+            autotick: true,
+            visible: showFirstMeasureAxis,
+          },
+        }}
+      />
+    </div>
+  );
+};

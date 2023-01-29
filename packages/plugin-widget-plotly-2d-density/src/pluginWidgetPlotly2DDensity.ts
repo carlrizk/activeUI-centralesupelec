@@ -5,7 +5,10 @@ import {
   FiltersEditor,
   PlotlyWidgetState,
   WidgetPlugin,
+  withQueryResult,
 } from "@activeviam/activeui-sdk";
+import { withoutIrrelevantRenders } from "@activeviam/chart";
+import { memo } from "react";
 import { IconWorld } from "./IconWorld";
 
 import { Plotly2DDensity } from "./Plotly2DDensity";
@@ -28,7 +31,7 @@ export const pluginWidgetPlotly2DDensity: WidgetPlugin<
       maxNumberOfFields: 2,
     },
   },
-  Component: Plotly2DDensity,
+  Component: withQueryResult(withoutIrrelevantRenders(memo(Plotly2DDensity))),
   contentEditor: DataVisualizationContentEditor,
   contextMenuItems: [],
   menuItems: [],
