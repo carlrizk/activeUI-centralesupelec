@@ -44,7 +44,8 @@
     "start": "lerna run start --parallel --include-dependencies --scope @activeui-cs/starter",
     "build": "lerna run build",
     "test": "lerna run test",
-    "lint": "lerna run lint"
+    "lint": "lerna run lint",
+    "lint:fix": "lerna run lint:fix"
   },
   "workspaces": [
     "packages/*"

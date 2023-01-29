@@ -11,6 +11,7 @@
   "scripts": {
     "build": "activeui-sdk-scripts build",
     "lint": "activeui-sdk-scripts lint",
+    "lint:fix": "activeui-sdk-scripts lint --fix",
     "start": "activeui-sdk-scripts start"
   },
   "dependencies": {
