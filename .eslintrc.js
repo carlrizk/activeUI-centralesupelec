@@ -11,7 +11,7 @@ module.exports = {
     parser: "@typescript-eslint/parser",
     project: "./tsconfig.json",
   },
-  plugins: ["react", "jsdoc", "eslint-comments"],
+  plugins: ["react", "jsdoc", "etc"],
   rules: {
     "jsdoc/require-jsdoc": [
       "warn",
@@ -26,6 +26,6 @@ module.exports = {
         },
       },
     ],
-    "eslint-comments/no-commented-out-code": "error",
+    "etc/no-commented-out-code": "warn",
   },
 };
