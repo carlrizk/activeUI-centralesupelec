@@ -25,7 +25,6 @@ export const pluginWidgetPlotlyBoxPlot: WidgetPlugin<
     },
     values: {
       role: "primaryNumeric",
-      // maxNumberOfFields: 2,
     },
   },
   Component: PlotlyBoxPlot,
@@ -37,7 +36,7 @@ export const pluginWidgetPlotlyBoxPlot: WidgetPlugin<
   initialState: {
     widgetKey,
     mapping: {
-      xaxis: [],
+      xAxis: [],
       values: [],
     },
     query: {},
@@ -49,7 +48,6 @@ export const pluginWidgetPlotlyBoxPlot: WidgetPlugin<
     "en-US": {
       key: "Box Plot",
       defaultName: "New Box Plot",
-      searchMeasures: "Search measures",
     },
   },
 };
