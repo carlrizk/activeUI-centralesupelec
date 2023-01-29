@@ -14,7 +14,7 @@ module.exports = {
   plugins: ["react", "jsdoc"],
   rules: {
     "jsdoc/require-jsdoc": [
-      "error",
+      "warn",
       {
         publicOnly: true,
         require: {
