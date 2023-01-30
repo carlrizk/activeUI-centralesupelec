@@ -1,31 +1,25 @@
 import { PlotBase } from "@activeui-cs/react-utils";
-import { WidgetPluginProps } from "@activeviam/activeui-sdk";
+import { withQueryResult, PlotlyWidgetState } from "@activeviam/activeui-sdk";
 import useComponentSize from "@rehooks/component-size";
-import React, { FC, useRef } from "react";
+import React, { useRef } from "react";
+import { Spin } from "antd";
+import { extractData } from "@activeui-cs/common";
 
 /**
- *
+ * Outputs the boxplot widget
  */
-export const PlotlyBoxPlot: FC<WidgetPluginProps> = (props) => {
+export const PlotlyBoxPlot = withQueryResult<PlotlyWidgetState>((props) => {
+  const { data, error, isLoading } = props.queryResult;
+
+  const extractedData = extractData(data);
+
+  // Possibility to add functionalities
+  const plotData: Plotly.Data[] = extractedData.map((result) => {
+    return { y: result.values, type: "box", name: result.measureName };
+  });
+
   const container = useRef<HTMLDivElement>(null);
   const { height, width } = useComponentSize(container);
-
-  const x = [];
-  const y0 = [];
-  const y1 = [];
-  const y2 = [];
-
-  for (let i = 0; i < 50; i++) {
-    if (i < 25) {
-      x[i] = "Day 1";
-    } else {
-      x[i] = "Day 2";
-    }
-
-    y0[i] = Math.random() * 1.5;
-    y1[i] = Math.random() * 3 + 1;
-    y2[i] = Math.random() * 2 + -1;
-  }
 
   return (
     <div
@@ -35,37 +29,21 @@ export const PlotlyBoxPlot: FC<WidgetPluginProps> = (props) => {
         height: "100%",
       }}
     >
-      <PlotBase
-        data={[
-          {
-            x,
-            y: y0,
-            type: "box",
-            name: "Film 1",
-            marker: { color: "#3D9970" },
-          },
-          {
-            x,
-            y: y1,
-            type: "box",
-            name: "Film 2",
-            marker: { color: "#FF4136" },
-          },
-          {
-            x,
-            y: y2,
-            type: "box",
-            name: "Film 3",
-            marker: { color: "#FF851B" },
-          },
-        ]}
-        layout={{
-          showlegend: false,
-          height,
-          width,
-          boxmode: "group",
-        }}
-      />
+      {error != null ? (
+        <div>{error.stackTrace}</div>
+      ) : isLoading ? (
+        <Spin />
+      ) : (
+        <PlotBase
+          data={plotData}
+          layout={{
+            showlegend: true,
+            height,
+            width: width - 25,
+            boxmode: "group",
+          }}
+        />
+      )}
     </div>
   );
-};
+});

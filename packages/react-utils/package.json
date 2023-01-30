@@ -11,7 +11,8 @@
   "scripts": {
     "build": "activeui-sdk-scripts build",
     "lint": "activeui-sdk-scripts lint",
-    "start": "activeui-sdk-scripts start"
+    "start": "activeui-sdk-scripts start",
+    "lint:fix": "activeui-sdk-scripts lint --fix"
   },
   "dependencies": {
     "plotly.js": "^2.18.0",
