@@ -1,6 +1,9 @@
 import { CellSet } from "@activeviam/activeui-sdk";
 import { MeasureData } from "./MeasureData";
 
+/**
+ *
+ */
 export function extractData(data?: CellSet): MeasureData[] {
   if (data == null) return [];
 
@@ -11,7 +14,6 @@ export function extractData(data?: CellSet): MeasureData[] {
     return [];
   }
   const columnCount = columnsAxis.positions.length;
-  // const rowCount = rowAxis.positions.length;
 
   const sums = data.cells.slice(0, columnCount);
   const values = data.cells.slice(columnCount);

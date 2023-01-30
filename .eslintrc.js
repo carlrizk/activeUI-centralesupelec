@@ -14,18 +14,18 @@ module.exports = {
   plugins: ["react", "jsdoc", "etc"],
   rules: {
     "jsdoc/require-jsdoc": [
-      "warn",
+      "error",
       {
         publicOnly: true,
         require: {
           FunctionDeclaration: true,
-          MethodDefinition: false,
-          ClassDeclaration: false,
-          ArrowFunctionExpression: false,
-          FunctionExpression: false,
+          MethodDefinition: true,
+          ClassDeclaration: true,
+          ArrowFunctionExpression: true,
+          FunctionExpression: true,
         },
       },
     ],
-    "etc/no-commented-out-code": "warn",
+    "etc/no-commented-out-code": "error",
   },
 };
