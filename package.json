@@ -47,7 +47,8 @@
     "build": "lerna run build",
     "test": "lerna run test",
     "lint": "lerna run lint",
-    "lint:fix": "lerna run lint:fix"
+    "lint:fix": "lerna run lint:fix",
+    "prettier:write": "lerna run prettier:write"
   },
   "workspaces": [
     "packages/*"

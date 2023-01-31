@@ -12,6 +12,7 @@
     "build": "activeui-sdk-scripts build",
     "lint": "activeui-sdk-scripts lint",
     "lint:fix": "activeui-sdk-scripts lint --fix",
+    "prettier:write": "prettier --write .",
     "start": "activeui-sdk-scripts start"
   },
   "dependencies": {
