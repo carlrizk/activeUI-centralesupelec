@@ -2,7 +2,9 @@ import { CellSet } from "@activeviam/activeui-sdk";
 import { MeasureData } from "./MeasureData";
 
 /**
- *
+ * Extracts measure data from a cellset
+ * @param {CellSet} data The CellSet or undefined
+ * @returns {MeasureData[]} A list of MeasureData objects or an empty list if data is undefined
  */
 export function extractData(data?: CellSet): MeasureData[] {
   if (data == null) return [];
