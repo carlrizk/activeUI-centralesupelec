@@ -9,6 +9,7 @@ import useComponentSize from "@rehooks/component-size";
 import { Spin } from "antd";
 import React, { memo, useRef } from "react";
 
+/* eslint-disable react/display-name */
 export const Plotly2DDensity = withQueryResult(
   withoutIrrelevantRenders(
     memo((props: WidgetWithQueryProps<PlotlyWidgetState>) => {
