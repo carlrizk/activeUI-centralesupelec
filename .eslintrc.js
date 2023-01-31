@@ -11,6 +11,21 @@ module.exports = {
     parser: "@typescript-eslint/parser",
     project: "./tsconfig.json",
   },
-  plugins: ["react"],
-  rules: {},
+  plugins: ["react", "jsdoc", "etc"],
+  rules: {
+    "jsdoc/require-jsdoc": [
+      "error",
+      {
+        publicOnly: true,
+        require: {
+          FunctionDeclaration: true,
+          MethodDefinition: true,
+          ClassDeclaration: true,
+          ArrowFunctionExpression: true,
+          FunctionExpression: true,
+        },
+      },
+    ],
+    "etc/no-commented-out-code": "error",
+  },
 };

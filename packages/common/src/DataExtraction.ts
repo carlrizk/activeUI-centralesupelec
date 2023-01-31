@@ -1,6 +1,11 @@
 import { CellSet } from "@activeviam/activeui-sdk";
 import { MeasureData } from "./MeasureData";
 
+/**
+ * Extracts measure data from a cellset
+ * @param {CellSet} data The CellSet or undefined
+ * @returns {MeasureData[]} A list of MeasureData objects or an empty list if data is undefined
+ */
 export function extractData(data?: CellSet): MeasureData[] {
   if (data == null) return [];
 
@@ -11,7 +16,6 @@ export function extractData(data?: CellSet): MeasureData[] {
     return [];
   }
   const columnCount = columnsAxis.positions.length;
-  // const rowCount = rowAxis.positions.length;
 
   const sums = data.cells.slice(0, columnCount);
   const values = data.cells.slice(columnCount);

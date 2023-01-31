@@ -3,6 +3,9 @@ import { WidgetPluginProps } from "@activeviam/activeui-sdk";
 import useComponentSize from "@rehooks/component-size";
 import React, { FC, useRef } from "react";
 
+/**
+ * @deprecated
+ */
 export const PlotlyFunnel: FC<WidgetPluginProps> = (props) => {
   const container = useRef<HTMLDivElement>(null);
   const { height, width } = useComponentSize(container);
