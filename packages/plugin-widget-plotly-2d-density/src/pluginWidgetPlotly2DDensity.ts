@@ -10,7 +10,7 @@ import { IconWorld } from "./IconWorld";
 
 import { Plotly2DDensity } from "./Plotly2DDensity";
 
-const widgetKey = "2d-density";
+const widgetKey = "plotly-2d-density";
 
 export const pluginWidgetPlotly2DDensity: WidgetPlugin<
   PlotlyWidgetState,
@@ -22,7 +22,6 @@ export const pluginWidgetPlotly2DDensity: WidgetPlugin<
     xAxis: {
       role: "primaryOrdinal",
       isMainAxis: true,
-      maxNumberOfFields: 1,
     },
     values: {
       role: "primaryNumeric",
@@ -32,6 +31,8 @@ export const pluginWidgetPlotly2DDensity: WidgetPlugin<
   Component: Plotly2DDensity,
   contentEditor: DataVisualizationContentEditor,
   contextMenuItems: [],
+  menuItems: [],
+  titleBarButtons: [],
   doesSupportMeasuresRedirection: true,
   filtersEditor: FiltersEditor,
   Icon: IconWorld,
@@ -43,14 +44,11 @@ export const pluginWidgetPlotly2DDensity: WidgetPlugin<
     },
     query: {},
   },
-  menuItems: [],
   queryEditor: DataVisualizationQueryEditor,
-  titleBarButtons: [],
   translations: {
     "en-US": {
       key: "2D Density",
       defaultName: "New 2D Density Plot",
-      searchMeasures: "Search Measures",
     },
   },
 };
