@@ -1,2 +1,2 @@
-export { extractData } from "./DataExtraction";
-export type { MeasureData } from "./MeasureData";
+export { extractData } from "./extractData";
+export type { MeasureData } from "./common.types";
