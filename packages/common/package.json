@@ -13,12 +13,17 @@
     "lint": "activeui-sdk-scripts lint",
     "lint:fix": "activeui-sdk-scripts lint --fix",
     "prettier:write": "prettier --write .",
-    "start": "activeui-sdk-scripts start"
+    "start": "activeui-sdk-scripts start",
+    "test": "jest"
   },
   "dependencies": {
     "@activeviam/activeui-sdk": "5.0.20"
   },
   "devDependencies": {
-    "@activeviam/activeui-sdk-scripts": "5.0.20"
+    "@activeviam/activeui-sdk-scripts": "5.0.20",
+    "@types/jest": "^29.4.0",
+    "jest": "^29.4.2",
+    "ts-jest": "^29.0.5",
+    "ts-node": "^10.9.1"
   }
 }
