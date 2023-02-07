@@ -9,27 +9,31 @@
     "build"
   ],
   "scripts": {
-    "start": "activeui-scripts start",
-    "build": "activeui-scripts build"
-  },
-  "dependencies": {
-    "@activeviam/activeui-scripts": "5.0.20",
-    "@activeviam/activeui-sdk": "5.0.20",
-    "@activeviam/sandbox-clients": "5.0.20",
-    "antd": "4.12.2",
-    "lodash": "^4.17.15",
-    "react": "^17.0.0",
-    "@activeui-cs/plugin-widget-plotly-2d-density": "0.0.1",
-    "@activeui-cs/plugin-widget-plotly-box-plot": "0.0.1",
-    "@activeui-cs/plugin-widget-plotly-funnel": "0.0.1"
-  },
-  "devDependencies": {
-    "@activeviam/browserslist-config-activeui": "5.0.20",
-    "@types/node": "^16.11.26",
-    "@types/react": "^16.9.34",
-    "typescript": "^4.5.2"
+    "build": "activeui-scripts build",
+    "start": "activeui-scripts start"
   },
   "browserslist": [
     "extends @activeviam/browserslist-config-activeui"
-  ]
+  ],
+  "dependencies": {
+    "@activeui-cs/plugin-widget-plotly-2d-density": "0.0.1",
+    "@activeui-cs/plugin-widget-plotly-box-plot": "0.0.1",
+    "@activeviam/activeui-sdk": "5.1.0",
+    "@activeviam/sandbox-clients": "5.1.0",
+    "antd": "^5.1.0",
+    "lodash": "^4.17.15",
+    "react": "^18.0.0",
+    "@activeviam/activeui-scripts": "5.1.0"
+  },
+  "devDependencies": {
+    "@activeviam/activeui-scripts": "5.1.0",
+    "@activeviam/browserslist-config-activeui": "5.1.0",
+    "@types/node": "^16.11.26",
+    "@types/react": "^18.0.26",
+    "typescript": "^4.8.4",
+    "@parcel/css": "*"
+  },
+  "engines": {
+    "node": ">=18.12.1"
+  }
 }

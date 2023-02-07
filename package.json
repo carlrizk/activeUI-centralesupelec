@@ -38,9 +38,8 @@
     "lerna": "^6.4.1",
     "lint-staged": "^13.0.3",
     "prettier": "2.7.1",
-    "typescript": "*"
+    "typescript": "^4.9.5"
   },
-  "main": "index.ts",
   "scripts": {
     "prepare": "husky install",
     "start": "lerna run start --parallel --include-dependencies --scope @activeui-cs/starter",
@@ -53,7 +52,5 @@
   "workspaces": [
     "packages/*"
   ],
-  "resolutions": {
-    "@types/react": "^18.0.27"
-  }
+  "packageManager": "yarn@1.22.19"
 }

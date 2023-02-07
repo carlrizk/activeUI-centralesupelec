@@ -1,5 +1,3 @@
-import React from "react";
-
 /**
  * Large icon of the earth, usable to represent the map in the widgets ribbon.
  */

@@ -1,15 +1,15 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
-    "module": "ES2022",
+    "target": "ES6",
+    "module": "ESNext",
     "composite": true,
     "incremental": true,
     "lib": ["DOM", "ESNext"],
     "importHelpers": true,
     "declarationMap": false,
     "declaration": true,
-    "emitDeclarationOnly": true,
-    "sourceMap": false,
+    "emitDeclarationOnly": false,
+    "sourceMap": true,
     "strict": true,
     "noEmitOnError": true,
     "noImplicitAny": true,
@@ -23,7 +23,7 @@
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "Node",
-    "jsx": "react",
+    "jsx": "react-jsxdev",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "resolveJsonModule": true

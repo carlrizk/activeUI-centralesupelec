@@ -2,26 +2,25 @@
   "name": "@activeui-cs/react-utils",
   "version": "0.0.1",
   "license": "MIT",
-  "main": "dist/cjs/index.js",
+  "type": "module",
   "module": "dist/esm/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "activeui-sdk-scripts build",
-    "lint": "activeui-sdk-scripts lint",
-    "lint:fix": "activeui-sdk-scripts lint --fix",
-    "prettier:write": "prettier --write .",
-    "start": "activeui-sdk-scripts start"
+    "build": "tsc --build",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
+    "start": "tsc --watch",
+    "prettier:write": "prettier --write ."
   },
   "dependencies": {
-    "plotly.js": "^2.18.0",
+    "plotly.js-dist-min": "^2.18.0",
     "react-plotly.js": "^2.6.0"
   },
   "devDependencies": {
-    "@activeviam/activeui-sdk-scripts": "5.0.20",
-    "@types/plotly.js": "2.12.13",
+    "@types/plotly.js": "^2.12.13",
     "@types/react-plotly.js": "^2.6.0"
   }
 }

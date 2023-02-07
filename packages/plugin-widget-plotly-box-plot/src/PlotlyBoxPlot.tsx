@@ -1,18 +1,16 @@
-import { PlotBase } from "@activeui-cs/react-utils";
 import { extractData } from "@activeui-cs/common";
+import { Data as PlotData, PlotBase } from "@activeui-cs/react-utils";
 import {
-  withQueryResult,
   WidgetWithQueryProps,
+  withQueryResult,
 } from "@activeviam/activeui-sdk";
 import { PlotlyWidgetState, withoutIrrelevantRenders } from "@activeviam/chart";
 import useComponentSize from "@rehooks/component-size";
 import { Spin } from "antd";
-import React, { memo, useRef } from "react";
-
+import { memo, useRef } from "react";
 /**
  * Outputs the boxplot widget
  */
-/* eslint-disable react/display-name */
 export const PlotlyBoxPlot = withQueryResult(
   withoutIrrelevantRenders(
     memo((props: WidgetWithQueryProps<PlotlyWidgetState>) => {
@@ -21,7 +19,7 @@ export const PlotlyBoxPlot = withQueryResult(
       const extractedData = extractData(data);
 
       // Possibility to add functionalities
-      const plotData: Plotly.Data[] = extractedData.map((result) => {
+      const plotData: PlotData[] = extractedData.map((result) => {
         return { y: result.values, type: "box", name: result.measureName };
       });
 
