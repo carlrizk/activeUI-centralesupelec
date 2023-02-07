@@ -1,49 +1,67 @@
 import { PlotBase } from "@activeui-cs/react-utils";
-import { withQueryResult, PlotlyWidgetState } from "@activeviam/activeui-sdk";
-import useComponentSize from "@rehooks/component-size";
-import React, { useRef } from "react";
-import { Spin } from "antd";
 import { extractData } from "@activeui-cs/common";
+import {
+  withQueryResult,
+  WidgetWithQueryProps,
+} from "@activeviam/activeui-sdk";
+import { PlotlyWidgetState, withoutIrrelevantRenders } from "@activeviam/chart";
+import useComponentSize from "@rehooks/component-size";
+import { Spin } from "antd";
+import React, { memo, useRef } from "react";
 
 /**
  * Outputs the boxplot widget
  */
-export const PlotlyBoxPlot = withQueryResult<PlotlyWidgetState>((props) => {
-  const { data, error, isLoading } = props.queryResult;
+/* eslint-disable react/display-name */
+export const PlotlyBoxPlot = withQueryResult(
+  withoutIrrelevantRenders(
+    memo((props: WidgetWithQueryProps<PlotlyWidgetState>) => {
+      const { data, error, isLoading } = props.queryResult;
 
-  const extractedData = extractData(data);
+      const extractedData = extractData(data);
 
-  // Possibility to add functionalities
-  const plotData: Plotly.Data[] = extractedData.map((result) => {
-    return { y: result.values, type: "box", name: result.measureName };
-  });
+      // Possibility to add functionalities
+      const plotData: Plotly.Data[] = extractedData.map((result) => {
+        return { y: result.values, type: "box", name: result.measureName };
+      });
 
-  const container = useRef<HTMLDivElement>(null);
-  const { height, width } = useComponentSize(container);
+      const showAxis = extractedData.length > 0;
 
-  return (
-    <div
-      ref={container}
-      style={{
-        ...props.style,
-        height: "100%",
-      }}
-    >
-      {error != null ? (
-        <div>{error.stackTrace}</div>
-      ) : isLoading ? (
-        <Spin />
-      ) : (
-        <PlotBase
-          data={plotData}
-          layout={{
-            showlegend: true,
-            height,
-            width: width - 25,
-            boxmode: "group",
+      const container = useRef<HTMLDivElement>(null);
+      const { height, width } = useComponentSize(container);
+
+      return (
+        <div
+          ref={container}
+          style={{
+            ...props.style,
+            height: "100%",
+            width: "100%",
           }}
-        />
-      )}
-    </div>
-  );
-});
+        >
+          {error != null ? (
+            <div>{error.stackTrace}</div>
+          ) : isLoading ? (
+            <Spin />
+          ) : (
+            <PlotBase
+              data={plotData}
+              layout={{
+                showlegend: true,
+                height,
+                width: width - 25,
+                boxmode: "group",
+                xaxis: {
+                  visible: showAxis,
+                },
+                yaxis: {
+                  visible: showAxis,
+                },
+              }}
+            />
+          )}
+        </div>
+      );
+    })
+  )
+);
