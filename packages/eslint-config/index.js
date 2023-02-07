@@ -12,6 +12,7 @@ module.exports = {
     project: "./tsconfig.json",
   },
   plugins: ["react", "jsdoc", "etc", "prettier"],
+  ignorePatterns: ["dist/"],
   rules: {
     "jsdoc/require-jsdoc": [
       "error",
@@ -28,5 +29,7 @@ module.exports = {
     ],
     "etc/no-commented-out-code": "error",
     "prettier/prettier": "error",
+    "react/react-in-jsx-scope": "off",
+    "react/display-name": "off",
   },
 };

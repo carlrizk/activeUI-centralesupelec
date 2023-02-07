@@ -10,12 +10,15 @@
   ],
   "scripts": {
     "build": "tsc --build",
-    "lint": "eslint",
-    "lint:fix": "eslint --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
     "start": "tsc --watch",
     "prettier:write": "prettier --write ."
   },
   "dependencies": {
     "@activeviam/activeui-sdk": "5.1.0"
+  },
+  "devDependencies": {
+    "@activeui-cs/eslint-config": "0.0.1"
   }
 }

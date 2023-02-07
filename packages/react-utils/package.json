@@ -10,8 +10,8 @@
   ],
   "scripts": {
     "build": "tsc --build",
-    "lint": "eslint",
-    "lint:fix": "eslint --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
     "start": "tsc --watch",
     "prettier:write": "prettier --write ."
   },
@@ -21,6 +21,6 @@
   },
   "devDependencies": {
     "@types/plotly.js": "^2.12.13",
-    "@types/react-plotly.js": "^2.6.0"
+    "@activeui-cs/eslint-config": "0.0.1"
   }
 }

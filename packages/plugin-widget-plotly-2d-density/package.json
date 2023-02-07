@@ -10,8 +10,8 @@
   ],
   "scripts": {
     "build": "tsc --build",
-    "lint": "eslint",
-    "lint:fix": "eslint --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
     "start": "tsc --watch",
     "prettier:write": "prettier --write ."
   },
@@ -23,5 +23,8 @@
     "@rehooks/component-size": "^1.0.3",
     "antd": "^5.1.0",
     "react": "^18.0.0"
+  },
+  "devDependencies": {
+    "@activeui-cs/eslint-config": "0.0.1"
   }
 }
