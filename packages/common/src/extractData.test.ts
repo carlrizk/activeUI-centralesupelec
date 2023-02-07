@@ -68,7 +68,7 @@ describe(extractData, () => {
       };
       expect(extractData(data)).toStrictEqual([
         {
-          measurename: "testingData",
+          measureName: "testingData",
           sum: 50,
           values: [10, 10, 20, -10, 15, 5],
         },
