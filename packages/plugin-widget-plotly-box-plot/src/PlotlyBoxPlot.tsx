@@ -1,5 +1,5 @@
 import { extractData } from "@activeui-cs/common";
-import { Data as PlotData, PlotBase } from "@activeui-cs/react-utils";
+import { PlotBase, PlotParams } from "@activeui-cs/react-utils";
 import {
   WidgetWithQueryProps,
   withQueryResult,
@@ -18,15 +18,29 @@ export const PlotlyBoxPlot = withQueryResult(
 
       const extractedData = extractData(data);
 
-      // Possibility to add functionalities
-      const plotData: PlotData[] = extractedData.map((result) => {
-        return { y: result.values, type: "box", name: result.measureName };
-      });
-
       const showAxis = extractedData.length > 0;
 
       const container = useRef<HTMLDivElement>(null);
       const { height, width } = useComponentSize(container);
+
+      // Possibility to add functionalities
+      const plotParams: PlotParams = {
+        data: extractedData.map((result) => {
+          return { y: result.values, type: "box", name: result.measureName };
+        }),
+        layout: {
+          showlegend: true,
+          height,
+          width: width - 25,
+          boxmode: "group",
+          xaxis: {
+            visible: showAxis,
+          },
+          yaxis: {
+            visible: showAxis,
+          },
+        },
+      };
 
       return (
         <div
@@ -42,21 +56,7 @@ export const PlotlyBoxPlot = withQueryResult(
           ) : isLoading ? (
             <Spin />
           ) : (
-            <PlotBase
-              data={plotData}
-              layout={{
-                showlegend: true,
-                height,
-                width: width - 25,
-                boxmode: "group",
-                xaxis: {
-                  visible: showAxis,
-                },
-                yaxis: {
-                  visible: showAxis,
-                },
-              }}
-            />
+            <PlotBase {...plotParams} />
           )}
         </div>
       );

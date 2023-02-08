@@ -9,7 +9,7 @@
     "declarationMap": false,
     "declaration": true,
     "emitDeclarationOnly": false,
-    "sourceMap": true,
+    "sourceMap": false,
     "strict": true,
     "noEmitOnError": true,
     "noImplicitAny": true,
