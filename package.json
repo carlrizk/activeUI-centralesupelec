@@ -37,7 +37,8 @@
     "test": "lerna run test",
     "lint": "lerna run lint",
     "lint:fix": "lerna run lint:fix",
-    "prettier:write": "lerna run prettier:write"
+    "prettier:write": "lerna run prettier:write",
+    "serve": "npx serve -u ./packages/starter/build"
   },
   "workspaces": [
     "packages/*"

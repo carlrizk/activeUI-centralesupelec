@@ -25,6 +25,7 @@ export const Plotly2DDensity = withQueryResult(
       const showSecondMeasureAxis = secondMeasure.length > 0;
 
       const container = useRef<HTMLDivElement>(null);
+      // @ts-expect-error
       const { height, width } = useComponentSize(container);
 
       const plotParams: PlotParams = {

@@ -21,6 +21,7 @@ export const PlotlyBoxPlot = withQueryResult(
       const showAxis = extractedData.length > 0;
 
       const container = useRef<HTMLDivElement>(null);
+      // @ts-expect-error
       const { height, width } = useComponentSize(container);
 
       // Possibility to add functionalities

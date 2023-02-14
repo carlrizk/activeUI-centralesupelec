@@ -3,13 +3,14 @@
   "version": "0.0.1",
   "license": "MIT",
   "type": "module",
-  "module": "dist/esm/index.js",
   "types": "dist/index.d.ts",
+  "exports": "./dist/index.js",
+  "main": "dist/index.js",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsc --build",
+    "build": "tsc --build --clean && tsc --build",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "start": "tsc --watch",

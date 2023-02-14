@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "declarationDir": "./dist",
-    "outDir": "./dist/esm",
+    "outDir": "./dist",
     "rootDir": "./src"
   },
   "extends": "../../tsconfig-base.json",
