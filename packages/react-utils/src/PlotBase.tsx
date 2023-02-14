@@ -1,4 +1,8 @@
-import Plot, { PlotParams } from "react-plotly.js";
+import { PlotParams } from "react-plotly.js";
+import createPlotlyComponent from "react-plotly.js/factory.js";
+import PlotlyCustom from "./plotly/index.js";
+
+const CustomPlot = createPlotlyComponent.default(PlotlyCustom);
 
 /**
  * Returns a minified plot component without the plotly logo and the reset scale button
@@ -13,6 +17,5 @@ export const PlotBase = (props: PlotParams): JSX.Element => {
     displaylogo: false,
     modeBarButtonsToRemove: ["resetScale2d"],
   };
-  // @ts-expect-error
-  return <Plot.default {...innerProps} />;
+  return <CustomPlot {...innerProps} />;
 };
