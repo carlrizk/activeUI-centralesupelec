@@ -6,6 +6,8 @@ import histogram from "plotly.js/lib/histogram.js";
 import histogram2dcontour from "plotly.js/lib/histogram2dcontour.js";
 // @ts-expect-error
 import box from "plotly.js/lib/box.js";
+// @ts-expect-error
+import sunburst from "plotly.js/lib/sunburst.js";
 
 // @ts-expect-error
 PlotlyCustom.register([
@@ -13,6 +15,7 @@ PlotlyCustom.register([
   histogram,
   histogram2dcontour,
   box,
+  sunburst,
   // transforms
   // components
 ]);
