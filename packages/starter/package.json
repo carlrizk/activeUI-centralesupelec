@@ -21,7 +21,7 @@
     "react": "^17.0.0",
     "@activeui-cs/plugin-widget-plotly-2d-density": "0.0.1",
     "@activeui-cs/plugin-widget-plotly-box-plot": "0.0.1",
-    "@activeui-cs/plugin-widget-plotly-funnel": "0.0.1"
+    "@activeui-cs/plugin-widget-plotly-sunburst": "0.0.1"
   },
   "devDependencies": {
     "@activeviam/browserslist-config-activeui": "5.0.20",
