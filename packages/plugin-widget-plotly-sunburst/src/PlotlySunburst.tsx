@@ -23,7 +23,7 @@ export const PlotlySunburst = withQueryResult(
         values: [],
       };
       if (rootNode != null) {
-        function addNodetoChart(node: Node, parent: Node | null) {
+        function addNodetoChart(node: Node, parent: Node | null): void {
           sunburstdata.ids.push(node.id);
           sunburstdata.labels.push(node.label);
           sunburstdata.parents.push(parent === null ? "" : parent.id);

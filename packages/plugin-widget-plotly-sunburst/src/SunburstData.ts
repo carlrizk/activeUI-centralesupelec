@@ -8,17 +8,26 @@ export interface SunburstData {
   values: number[];
 }
 
+/**
+ *
+ */
 export class Node {
   children: Map<string, Node> = new Map();
   value: number = 0;
   label: string = "";
   id: string = uuidv4();
+  /**
+   *
+   */
   constructor(label: string, value: number) {
     this.value = value;
     this.label = label;
   }
 }
 
+/**
+ *
+ */
 export function extractData(data?: CellSet): Node | null {
   if (data == null) return null;
 
@@ -30,7 +39,7 @@ export function extractData(data?: CellSet): Node | null {
   }
   const columnCount = columnsAxis.positions.length;
 
-  if (columnCount != 1) return null;
+  if (columnCount !== 1) return null;
 
   let values = data.cells.map((value) => value.value as number);
   const total = values[0];
@@ -40,7 +49,7 @@ export function extractData(data?: CellSet): Node | null {
 
   const positions = rowAxis.positions
     .map((position) => position.map((pos) => pos.namePath))
-    .map((position) => position.flat().filter((label) => label != "AllMember"))
+    .map((position) => position.flat().filter((label) => label !== "AllMember"))
     .slice(1);
 
   console.log(positions);
@@ -53,7 +62,7 @@ export function extractData(data?: CellSet): Node | null {
       if (!cursor.children.has(subposition)) {
         cursor.children.set(subposition, new Node(subposition, values[posidx]));
       }
-      cursor = cursor.children.get(subposition)!;
+      cursor = cursor.children.get(subposition) ?? result;
     }
   }
 

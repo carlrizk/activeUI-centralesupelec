@@ -22,7 +22,7 @@
   "devDependencies": {
     "@activeviam/activeui-sdk-scripts": "5.0.20",
     "@types/plotly.js": "2.12.13",
-    "@types/react-plotly.js": "^2.6.0",
-    "@types/react": "^16.9.34"
+    "@types/react": "^16.9.34",
+    "@types/react-plotly.js": "^2.6.0"
   }
 }
