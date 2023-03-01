@@ -1,4 +1,4 @@
-import { CellSet, Axis, Cell } from "@activeviam/activeui-sdk";
+import { Axis, Cell, CellSet } from "@activeviam/activeui-sdk";
 import { extractData } from "./extractData.js";
 
 describe(extractData, () => {
