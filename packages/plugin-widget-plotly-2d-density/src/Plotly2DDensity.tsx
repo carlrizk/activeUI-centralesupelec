@@ -1,5 +1,5 @@
 import { extractData } from "@activeui-cs/common";
-import { Data as PlotData, PlotBase } from "@activeui-cs/react-utils";
+import { PlotBase, PlotParams } from "@activeui-cs/react-utils";
 import {
   WidgetWithQueryProps,
   withQueryResult,
@@ -7,9 +7,8 @@ import {
 import { PlotlyWidgetState, withoutIrrelevantRenders } from "@activeviam/chart";
 import useComponentSize from "@rehooks/component-size";
 import { Spin } from "antd";
-import React, { memo, useRef } from "react";
+import { memo, useRef } from "react";
 
-/* eslint-disable react/display-name */
 export const Plotly2DDensity = withQueryResult(
   withoutIrrelevantRenders(
     memo((props: WidgetWithQueryProps<PlotlyWidgetState>) => {
@@ -25,44 +24,86 @@ export const Plotly2DDensity = withQueryResult(
       const showFirstMeasureAxis = firstMeasure.length > 0;
       const showSecondMeasureAxis = secondMeasure.length > 0;
 
-      const plotData: PlotData[] = [
-        {
-          x: firstMeasure,
-          y: secondMeasure,
-          mode: "markers",
-          name: "Points",
-          marker: {
-            color: "rgb(102,0,0)",
-            size: 2,
-            opacity: 0.4,
-          },
-          type: "scatter",
-        },
-        {
-          x: firstMeasure,
-          y: secondMeasure,
-          name: "density",
-          colorscale: "Hot",
-          reversescale: true,
-          showscale: false,
-          type: "histogram2dcontour",
-        },
-        {
-          x: firstMeasure,
-          name: extractedData.length >= 1 ? extractedData[0].measureName : "",
-          yaxis: "y2",
-          type: "histogram",
-        },
-        {
-          y: secondMeasure,
-          name: extractedData.length === 2 ? extractedData[1].measureName : "",
-          xaxis: "x2",
-          type: "histogram",
-        },
-      ];
-
       const container = useRef<HTMLDivElement>(null);
+      // @ts-expect-error
       const { height, width } = useComponentSize(container);
+
+      const plotParams: PlotParams = {
+        data: [
+          {
+            x: firstMeasure,
+            y: secondMeasure,
+            mode: "markers",
+            name: "Points",
+            marker: {
+              color: "rgb(102,0,0)",
+              size: 2,
+              opacity: 0.4,
+            },
+            type: "scatter",
+          },
+          {
+            x: firstMeasure,
+            y: secondMeasure,
+            name: "density",
+            colorscale: "Hot",
+            reversescale: true,
+            showscale: false,
+            type: "histogram2dcontour",
+          },
+          {
+            x: firstMeasure,
+            name: extractedData.length >= 1 ? extractedData[0].measureName : "",
+            yaxis: "y2",
+            type: "histogram",
+          },
+          {
+            y: secondMeasure,
+            name:
+              extractedData.length === 2 ? extractedData[1].measureName : "",
+            xaxis: "x2",
+            type: "histogram",
+          },
+        ],
+        layout: {
+          showlegend: true,
+          hovermode: "closest",
+          width: width - 25,
+          height,
+          xaxis: {
+            domain: [0, 0.8],
+            zeroline: false,
+            showgrid: true,
+            automargin: true,
+            autotick: true,
+            visible: showFirstMeasureAxis,
+          },
+          yaxis: {
+            domain: [0, 0.8],
+            zeroline: false,
+            showgrid: true,
+            automargin: true,
+            autotick: true,
+            visible: showSecondMeasureAxis,
+          },
+          xaxis2: {
+            domain: [0.85, 1],
+            zeroline: false,
+            showgrid: true,
+            automargin: true,
+            autotick: true,
+            visible: showSecondMeasureAxis,
+          },
+          yaxis2: {
+            domain: [0.85, 1],
+            zeroline: false,
+            showgrid: true,
+            automargin: true,
+            autotick: true,
+            visible: showFirstMeasureAxis,
+          },
+        },
+      };
 
       return (
         <div
@@ -78,47 +119,7 @@ export const Plotly2DDensity = withQueryResult(
           ) : isLoading ? (
             <Spin />
           ) : (
-            <PlotBase
-              data={plotData}
-              layout={{
-                showlegend: true,
-                hovermode: "closest",
-                width: width - 25,
-                height,
-                xaxis: {
-                  domain: [0, 0.8],
-                  zeroline: false,
-                  showgrid: true,
-                  automargin: true,
-                  autotick: true,
-                  visible: showFirstMeasureAxis,
-                },
-                yaxis: {
-                  domain: [0, 0.8],
-                  zeroline: false,
-                  showgrid: true,
-                  automargin: true,
-                  autotick: true,
-                  visible: showSecondMeasureAxis,
-                },
-                xaxis2: {
-                  domain: [0.85, 1],
-                  zeroline: false,
-                  showgrid: true,
-                  automargin: true,
-                  autotick: true,
-                  visible: showSecondMeasureAxis,
-                },
-                yaxis2: {
-                  domain: [0.85, 1],
-                  zeroline: false,
-                  showgrid: true,
-                  automargin: true,
-                  autotick: true,
-                  visible: showFirstMeasureAxis,
-                },
-              }}
-            />
+            <PlotBase {...plotParams} />
           )}
         </div>
       );

@@ -6,9 +6,9 @@ import {
   PlotlyWidgetState,
   WidgetPlugin,
 } from "@activeviam/activeui-sdk";
-import { IconWorld } from "./IconWorld";
+import { IconWorld } from "./IconWorld.js";
 
-import { Plotly2DDensity } from "./Plotly2DDensity";
+import { Plotly2DDensity } from "./Plotly2DDensity.js";
 
 const widgetKey = "plotly-2d-density";
 

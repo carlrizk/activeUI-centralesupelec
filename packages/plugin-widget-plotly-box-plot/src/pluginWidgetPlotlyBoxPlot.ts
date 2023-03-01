@@ -1,13 +1,13 @@
 import {
-  WidgetPlugin,
   CellSetSelection,
   DataVisualizationContentEditor,
   DataVisualizationQueryEditor,
   FiltersEditor,
   PlotlyWidgetState,
+  WidgetPlugin,
 } from "@activeviam/activeui-sdk";
-import { IconWorld } from "./IconWorld";
-import { PlotlyBoxPlot } from "./PlotlyBoxPlot";
+import { IconWorld } from "./IconWorld.js";
+import { PlotlyBoxPlot } from "./PlotlyBoxPlot.js";
 
 const widgetKey = "plotly-box-plot";
 

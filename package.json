@@ -24,23 +24,12 @@
   },
   "repository": "https://github.com/carlrizk/activeUI-centralesupelec",
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.46.1",
-    "eslint": "^8.29.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-config-standard-with-typescript": "^24.0.0",
-    "eslint-plugin-etc": "^2.0.2",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jsdoc": "^39.7.4",
-    "eslint-plugin-n": "^15.6.0",
-    "eslint-plugin-promise": "^6.1.1",
-    "eslint-plugin-react": "^7.31.11",
     "husky": "^8.0.1",
     "lerna": "^6.4.1",
     "lint-staged": "^13.0.3",
     "prettier": "2.7.1",
-    "typescript": "*"
+    "typescript": "^4.9.5"
   },
-  "main": "index.ts",
   "scripts": {
     "prepare": "husky install",
     "start": "lerna run start --parallel --include-dependencies --scope @activeui-cs/starter",
@@ -48,12 +37,11 @@
     "test": "lerna run test",
     "lint": "lerna run lint",
     "lint:fix": "lerna run lint:fix",
-    "prettier:write": "lerna run prettier:write"
+    "prettier:write": "lerna run prettier:write",
+    "serve": "npx serve -u ./packages/starter/build"
   },
   "workspaces": [
     "packages/*"
   ],
-  "resolutions": {
-    "@types/react": "^18.0.27"
-  }
+  "packageManager": "yarn@1.22.19"
 }

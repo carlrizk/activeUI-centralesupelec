@@ -1,2 +1,2 @@
-export type { Data } from "plotly.js";
-export { PlotBase } from "./plot-base";
+export type { PlotParams } from "react-plotly.js";
+export { PlotBase } from "./PlotBase.js";
