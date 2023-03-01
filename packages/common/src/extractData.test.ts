@@ -1,4 +1,4 @@
-import { Axis, Cell, CellSet } from "@activeviam/activeui-sdk";
+import { CellSet, Axis, Cell } from "@activeviam/activeui-sdk";
 import { extractData } from "./extractData.js";
 
 describe(extractData, () => {
@@ -85,6 +85,8 @@ describe(extractData, () => {
               namePath: ["testingData1"],
               properties: {},
             },
+          ],
+          [
             {
               captionPath: ["testingData2"],
               namePath: ["testingData2"],
@@ -110,23 +112,21 @@ describe(extractData, () => {
         maxLevelPerHierarchy: [2],
       };
 
-      const cells1 = [50, 10, 10, 20, -10, 15, 5].map((value, index) => {
+      const measure1 = [50, 30, 10, 10, 20, -10, -10];
+      const measure2 = [30, 10, 10, 40, -35, 10, -5];
+      const mixmeasure: number[] = measure1
+        .map((element, index) => {
+          return [element, measure2[index]];
+        })
+        .flat();
+
+      const cells = mixmeasure.map((value, index) => {
         return {
           formattedValue: value.toString(),
           ordinal: index,
           value: value,
         } as Cell;
       });
-
-      const cells2 = [30, 10, 10, 40, -35, 10, -5].map((value, index) => {
-        return {
-          formattedValue: value.toString(),
-          ordinal: index,
-          value: value,
-        } as Cell;
-      });
-
-      const cells = [...cells1, ...cells2];
 
       const data: CellSet = {
         axes: [ax1, ax2],
@@ -138,14 +138,14 @@ describe(extractData, () => {
 
       expect(extractData(data)).toStrictEqual([
         {
-          measureName: "testingData",
+          measureName: "testingData1",
           sum: 50,
-          values: [10, 10, 20, -10, 15, 5],
+          values: [30, 10, 10, 20, -10, -10],
         },
         {
           measureName: "testingData2",
           sum: 30,
-          values: [10, 10, 40, -30],
+          values: [10, 10, 40, -35, 10, -5],
         },
       ]);
     });

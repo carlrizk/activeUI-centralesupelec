@@ -17,6 +17,8 @@ export function extractData(data?: CellSet): MeasureData[] {
   }
   const columnCount = columnsAxis.positions.length;
 
+  console.log("Number of columns: ", columnCount, ", ", columnsAxis);
+
   const sums = data.cells.slice(0, columnCount);
   const values = data.cells.slice(columnCount);
 
