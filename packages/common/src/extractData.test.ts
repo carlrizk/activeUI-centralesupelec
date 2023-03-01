@@ -52,16 +52,18 @@ describe(extractData, () => {
       };
 
       const cells = [50, 10, 10, 20, -10, 15, 5].map((value, index) => {
-        return {
+        const aux: Cell = {
           formattedValue: value.toString(),
           ordinal: index,
-          value: value,
-        } as Cell;
+          value,
+          properties: {},
+        };
+        return aux;
       });
 
       const data: CellSet = {
         axes: [ax1, ax2],
-        cells: cells,
+        cells,
         cube: "nameTest",
         epoch: 1234,
         defaultMembers: [],
@@ -121,16 +123,18 @@ describe(extractData, () => {
         .flat();
 
       const cells = mixmeasure.map((value, index) => {
-        return {
+        const aux: Cell = {
           formattedValue: value.toString(),
           ordinal: index,
-          value: value,
-        } as Cell;
+          value,
+          properties: {},
+        };
+        return aux;
       });
 
       const data: CellSet = {
         axes: [ax1, ax2],
-        cells: cells,
+        cells,
         cube: "nameTest",
         epoch: 1234,
         defaultMembers: [],
