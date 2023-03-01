@@ -19,6 +19,7 @@
     "@activeui-cs/common": "0.0.1",
     "@activeui-cs/react-utils": "0.0.1",
     "@activeviam/activeui-sdk": "5.0.20",
+    "@activeviam/chart": "5.0.20",
     "@rehooks/component-size": "^1.0.3",
     "antd": "4.12.2",
     "react": "^17.0.0"
