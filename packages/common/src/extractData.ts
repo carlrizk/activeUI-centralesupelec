@@ -20,6 +20,8 @@ export function extractData(data?: CellSet): MeasureData[] {
   const sums = data.cells.slice(0, columnCount);
   const values = data.cells.slice(columnCount);
 
+  console.log(data);
+
   return columnsAxis.positions.map((measure, measureIndex) => {
     return {
       measureName: measure[0].captionPath[0],
