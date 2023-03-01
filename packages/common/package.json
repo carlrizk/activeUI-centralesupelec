@@ -2,28 +2,30 @@
   "name": "@activeui-cs/common",
   "version": "0.0.1",
   "license": "MIT",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
+  "type": "module",
   "types": "dist/index.d.ts",
+  "exports": "./dist/index.js",
+  "main": "dist/index.js",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "activeui-sdk-scripts build",
-    "lint": "activeui-sdk-scripts lint",
-    "lint:fix": "activeui-sdk-scripts lint --fix",
+    "build": "tsc --build --clean && tsc --build",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "start": "tsc --watch",
     "prettier:write": "prettier --write .",
-    "start": "activeui-sdk-scripts start",
     "test": "jest"
   },
   "dependencies": {
-    "@activeviam/activeui-sdk": "5.0.20"
+    "@activeviam/activeui-sdk": "5.1.0"
   },
   "devDependencies": {
     "@activeviam/activeui-sdk-scripts": "5.0.20",
     "@types/jest": "^29.4.0",
     "jest": "^29.4.2",
     "ts-jest": "^29.0.5",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "@activeui-cs/eslint-config": "0.0.1"
   }
 }

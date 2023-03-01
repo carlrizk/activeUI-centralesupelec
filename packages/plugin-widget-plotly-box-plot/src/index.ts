@@ -1,1 +1,1 @@
-export { pluginWidgetPlotlyBoxPlot } from "./pluginWidgetPlotlyBoxPlot";
+export { pluginWidgetPlotlyBoxPlot } from "./pluginWidgetPlotlyBoxPlot.js";

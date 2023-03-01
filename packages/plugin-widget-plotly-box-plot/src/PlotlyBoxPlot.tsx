@@ -1,49 +1,66 @@
-import { PlotBase } from "@activeui-cs/react-utils";
-import { withQueryResult, PlotlyWidgetState } from "@activeviam/activeui-sdk";
-import useComponentSize from "@rehooks/component-size";
-import React, { useRef } from "react";
-import { Spin } from "antd";
 import { extractData } from "@activeui-cs/common";
-
+import { PlotBase, PlotParams } from "@activeui-cs/react-utils";
+import {
+  WidgetWithQueryProps,
+  withQueryResult,
+} from "@activeviam/activeui-sdk";
+import { PlotlyWidgetState, withoutIrrelevantRenders } from "@activeviam/chart";
+import useComponentSize from "@rehooks/component-size";
+import { Spin } from "antd";
+import { memo, useRef } from "react";
 /**
  * Outputs the boxplot widget
  */
-export const PlotlyBoxPlot = withQueryResult<PlotlyWidgetState>((props) => {
-  const { data, error, isLoading } = props.queryResult;
+export const PlotlyBoxPlot = withQueryResult(
+  withoutIrrelevantRenders(
+    memo((props: WidgetWithQueryProps<PlotlyWidgetState>) => {
+      const { data, error, isLoading } = props.queryResult;
 
-  const extractedData = extractData(data);
+      const extractedData = extractData(data);
 
-  // Possibility to add functionalities
-  const plotData: Plotly.Data[] = extractedData.map((result) => {
-    return { y: result.values, type: "box", name: result.measureName };
-  });
+      const showAxis = extractedData.length > 0;
 
-  const container = useRef<HTMLDivElement>(null);
-  const { height, width } = useComponentSize(container);
+      const container = useRef<HTMLDivElement>(null);
+      // @ts-expect-error
+      const { height, width } = useComponentSize(container);
 
-  return (
-    <div
-      ref={container}
-      style={{
-        ...props.style,
-        height: "100%",
-      }}
-    >
-      {error != null ? (
-        <div>{error.stackTrace}</div>
-      ) : isLoading ? (
-        <Spin />
-      ) : (
-        <PlotBase
-          data={plotData}
-          layout={{
-            showlegend: true,
-            height,
-            width: width - 25,
-            boxmode: "group",
+      // Possibility to add functionalities
+      const plotParams: PlotParams = {
+        data: extractedData.map((result) => {
+          return { y: result.values, type: "box", name: result.measureName };
+        }),
+        layout: {
+          showlegend: true,
+          height,
+          width: width - 25,
+          boxmode: "group",
+          xaxis: {
+            visible: showAxis,
+          },
+          yaxis: {
+            visible: showAxis,
+          },
+        },
+      };
+
+      return (
+        <div
+          ref={container}
+          style={{
+            ...props.style,
+            height: "100%",
+            width: "100%",
           }}
-        />
-      )}
-    </div>
-  );
-});
+        >
+          {error != null ? (
+            <div>{error.stackTrace}</div>
+          ) : isLoading ? (
+            <Spin />
+          ) : (
+            <PlotBase {...plotParams} />
+          )}
+        </div>
+      );
+    })
+  )
+);

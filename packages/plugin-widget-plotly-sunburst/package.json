@@ -1,0 +1,33 @@
+{
+  "name": "@activeui-cs/plugin-widget-plotly-sunburst",
+  "version": "0.0.1",
+  "license": "MIT",
+  "type": "module",
+  "types": "dist/index.d.ts",
+  "exports": "./dist/index.js",
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc --build --clean && tsc --build",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "start": "tsc --watch",
+    "prettier:write": "prettier --write ."
+  },
+  "dependencies": {
+    "@activeui-cs/common": "0.0.1",
+    "@activeui-cs/react-utils": "0.0.1",
+    "@activeviam/activeui-sdk": "5.1.0",
+    "@activeviam/chart": "5.1.0",
+    "@rehooks/component-size": "^1.0.3",
+    "antd": "^5.1.0",
+    "react": "^18.0.0",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/uuid": "^9.0.0",
+    "@activeui-cs/eslint-config": "0.0.1"
+  }
+}

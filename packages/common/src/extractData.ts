@@ -1,5 +1,5 @@
 import { CellSet } from "@activeviam/activeui-sdk";
-import { MeasureData } from "./common.types";
+import { MeasureData } from "./common.types.js";
 
 /**
  * Extracts measure data from a cellset

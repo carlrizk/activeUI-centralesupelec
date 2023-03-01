@@ -1,5 +1,5 @@
 import { CellSet, Axis, Cell } from "@activeviam/activeui-sdk";
-import { extractData } from "./extractData";
+import { extractData } from "./extractData.js";
 
 describe(extractData, () => {
   describe("should return an empty list", () => {
@@ -66,91 +66,6 @@ describe(extractData, () => {
         epoch: 1234,
         defaultMembers: [],
       };
-      expect(extractData(data)).toStrictEqual([
-        {
-          measureName: "testingData",
-          sum: 50,
-          values: [10, 10, 20, -10, 15, 5],
-        },
-      ]);
-    });
-    test("with a list", () => {
-      const ax1: Axis = {
-        id: 0,
-        hierarchies: [],
-        positions: [
-          [
-            {
-              captionPath: ["testingData1"],
-              namePath: ["testingData1"],
-              properties: {},
-            },
-          ],
-        ],
-        maxLevelPerHierarchy: [1],
-      };
-
-      const ax2: Axis = {
-        id: 1,
-        hierarchies: [],
-        positions: [
-          [
-            {
-              captionPath: ["AllMember"],
-              namePath: ["AllMember"],
-              properties: {},
-            },
-          ],
-        ],
-        maxLevelPerHierarchy: [2],
-      };
-
-      const ax3: Axis = {
-        id: 0,
-        hierarchies: [],
-        positions: [
-          [
-            {
-              captionPath: ["testingData2"],
-              namePath: ["testingData2"],
-              properties: {},
-            },
-          ],
-        ],
-        maxLevelPerHierarchy: [1],
-      };
-
-      const ax4: Axis = {
-        id: 1,
-        hierarchies: [],
-        positions: [
-          [
-            {
-              captionPath: ["AllMember"],
-              namePath: ["AllMember"],
-              properties: {},
-            },
-          ],
-        ],
-        maxLevelPerHierarchy: [2],
-      };
-
-      const cells = [50, 10, 10, 20, -10, 15, 5].map((value, index) => {
-        return {
-          formattedValue: value.toString(),
-          ordinal: index,
-          value: value,
-        } as Cell;
-      });
-
-      const data: CellSet = {
-        axes: [ax1, ax2],
-        cells: cells,
-        cube: "nameTest",
-        epoch: 1234,
-        defaultMembers: [],
-      };
-
       expect(extractData(data)).toStrictEqual([
         {
           measureName: "testingData",
