@@ -1,4 +1,3 @@
-import { extractData, SunburstData, Node } from "./SunburstData";
 import { PlotBase } from "@activeui-cs/react-utils";
 import {
   WidgetWithQueryProps,
@@ -7,7 +6,8 @@ import {
 import { PlotlyWidgetState, withoutIrrelevantRenders } from "@activeviam/chart";
 import useComponentSize from "@rehooks/component-size";
 import { Spin } from "antd";
-import React, { memo, useRef } from "react";
+import { memo, useRef } from "react";
+import { extractData, Node, SunburstData } from "./SunburstData.js";
 
 /* eslint-disable react/display-name */
 export const PlotlySunburst = withQueryResult(
@@ -42,6 +42,7 @@ export const PlotlySunburst = withQueryResult(
       }
 
       const container = useRef<HTMLDivElement>(null);
+      // @ts-expect-error
       const { height, width } = useComponentSize(container);
 
       return (

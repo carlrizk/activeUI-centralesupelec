@@ -6,9 +6,9 @@ import {
   PlotlyWidgetState,
   WidgetPlugin,
 } from "@activeviam/activeui-sdk";
-import { IconWorld } from "./IconWorld";
+import { IconWorld } from "./IconWorld.js";
 
-import { PlotlySunburst } from "./PlotlySunburst";
+import { PlotlySunburst } from "./PlotlySunburst.js";
 
 const widgetKey = "plotly-sunburst";
 

@@ -1,7 +1,7 @@
 window.env = {
   contentServerVersion: "6.0.0-SNAPSHOT",
   contentServerUrl: "https://activepivot-ranch.activeviam.com:5999",
-  // WARNING: Changing the keys of activePivotServers will break previously saved widgets and dashboards.
+  // WARNING: Changing the keys of activePivotServers will break previously saved widgets and dashboards.
   // If you must do it, then you also need to update each one's serverKey attribute on your content server.
   activePivotServers: {
     // You can connect to as many servers as needed.

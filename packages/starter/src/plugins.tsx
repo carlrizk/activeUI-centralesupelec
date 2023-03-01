@@ -1,11 +1,10 @@
-import _keyBy from "lodash/keyBy";
+import { pluginWidgetPlotly2DDensity } from "@activeui-cs/plugin-widget-plotly-2d-density";
+import { pluginWidgetPlotlyBoxPlot } from "@activeui-cs/plugin-widget-plotly-box-plot";
+import { pluginWidgetPlotlySunburst } from "@activeui-cs/plugin-widget-plotly-sunburst";
 import {
   CellPlugin,
   CellStylePlugin,
   MenuItemPlugin,
-  PluginRegistry,
-  TitleBarButtonPlugin,
-  WidgetPlugin,
   pluginCellPivotTable,
   pluginCellStyleDrillthroughTable,
   pluginCellStylePivotTable,
@@ -14,23 +13,30 @@ import {
   pluginCellTreeTable,
   pluginMenuItemCopyQuery,
   pluginMenuItemDuplicateWidget,
-  pluginMenuItemExportToCsv,
   pluginMenuItemExportDrillthroughToCsv,
+  pluginMenuItemExportToCsv,
   pluginMenuItemFilterOnEverythingButSelection,
   pluginMenuItemFilterOnSelection,
   pluginMenuItemFullScreen,
-  pluginMenuItemShowHideTotals,
+  pluginMenuItemHideColumns,
   pluginMenuItemOpenDrillthrough,
   pluginMenuItemRefreshQuery,
   pluginMenuItemRemoveSort,
   pluginMenuItemRemoveWidget,
+  pluginMenuItemSaveWidget,
+  pluginMenuItemSaveWidgetAs,
+  pluginMenuItemShowHideTotals,
   pluginMenuItemSortChartAscendingly,
   pluginMenuItemSortChartDescendingly,
   pluginMenuItemSortDrillthroughTableAscendingly,
   pluginMenuItemSortDrillthroughTableDescendingly,
   pluginMenuItemSortPivotTableAscendingly,
   pluginMenuItemSortPivotTableDescendingly,
+  pluginMenuItemSortTableAscendingly,
+  pluginMenuItemSortTableDescendingly,
   pluginMenuItemSwitchQuickFilterMode,
+  pluginMenuItemSynchronizeSavedWidget,
+  PluginRegistry,
   pluginTitleBarButtonFullScreen,
   pluginTitleBarButtonRemoveWidget,
   pluginTitleBarButtonToggleQueryMode,
@@ -44,7 +50,7 @@ import {
   pluginWidgetPlotlyBulletChart,
   pluginWidgetPlotlyClusteredBarChart,
   pluginWidgetPlotlyClusteredColumnChart,
-  pluginWidgetPlotlyComboChart,
+  pluginWidgetPlotlyColumnsAndLinesChart,
   pluginWidgetPlotlyDonutChart,
   pluginWidgetPlotlyGaugeChart,
   pluginWidgetPlotlyLineChart,
@@ -56,13 +62,12 @@ import {
   pluginWidgetPlotlyStackedColumnChart,
   pluginWidgetPlotlyTreeMap,
   pluginWidgetPlotlyWaterfallChart,
-  pluginWidgetQuickFilter,
   pluginWidgetTable,
   pluginWidgetTreeTable,
+  TitleBarButtonPlugin,
+  WidgetPlugin,
 } from "@activeviam/activeui-sdk";
-import { pluginWidgetPlotly2DDensity } from "@activeui-cs/plugin-widget-plotly-2d-density";
-import { pluginWidgetPlotlyBoxPlot } from "@activeui-cs/plugin-widget-plotly-box-plot";
-import { pluginWidgetPlotlySunburst } from "@activeui-cs/plugin-widget-plotly-sunburst";
+import _keyBy from "lodash/keyBy";
 
 const cellPlugins: Array<CellPlugin<any>> = [
   pluginCellTable,
@@ -79,6 +84,7 @@ const cellStylePlugins: Array<CellStylePlugin<any>> = [
 const menuItemPlugins: Array<MenuItemPlugin<any, any>> = [
   pluginMenuItemDuplicateWidget,
   pluginMenuItemFullScreen,
+  pluginMenuItemHideColumns,
   pluginMenuItemFilterOnEverythingButSelection,
   pluginMenuItemFilterOnSelection,
   pluginMenuItemRemoveWidget,
@@ -95,7 +101,12 @@ const menuItemPlugins: Array<MenuItemPlugin<any, any>> = [
   pluginMenuItemSortDrillthroughTableDescendingly,
   pluginMenuItemSortPivotTableAscendingly,
   pluginMenuItemSortPivotTableDescendingly,
+  pluginMenuItemSortTableAscendingly,
+  pluginMenuItemSortTableDescendingly,
   pluginMenuItemSwitchQuickFilterMode,
+  pluginMenuItemSynchronizeSavedWidget,
+  pluginMenuItemSaveWidget,
+  pluginMenuItemSaveWidgetAs,
 ];
 
 const titleBarButtonPlugins: Array<TitleBarButtonPlugin<any>> = [
@@ -104,11 +115,11 @@ const titleBarButtonPlugins: Array<TitleBarButtonPlugin<any>> = [
   pluginTitleBarButtonToggleQueryMode,
 ];
 
-// Order matters: it controls the order of the icons in the widget ribbons.
+// Order matters: it controls the order of the icons in the widget list.
 const widgetPlugins: Array<WidgetPlugin<any, any>> = [
   pluginWidgetPlotlySunburst,
-  pluginWidgetPlotlyBoxPlot,
   pluginWidgetPlotly2DDensity,
+  pluginWidgetPlotlyBoxPlot,
   pluginWidgetPivotTable,
   pluginWidgetTreeTable,
   pluginWidgetTable,
@@ -120,7 +131,7 @@ const widgetPlugins: Array<WidgetPlugin<any, any>> = [
   pluginWidgetPlotlyStackedColumnChart,
   pluginWidgetPlotlyClusteredColumnChart,
   pluginWidgetPlotly100StackedColumnChart,
-  pluginWidgetPlotlyComboChart,
+  pluginWidgetPlotlyColumnsAndLinesChart,
   pluginWidgetPlotlyStackedBarChart,
   pluginWidgetPlotlyClusteredBarChart,
   pluginWidgetPlotly100StackedBarChart,
@@ -132,7 +143,6 @@ const widgetPlugins: Array<WidgetPlugin<any, any>> = [
   pluginWidgetPlotlyBulletChart,
   pluginWidgetPlotlyGaugeChart,
   pluginWidgetPlotlyTreeMap,
-  pluginWidgetQuickFilter,
   pluginWidgetDrillthroughTable,
 ];
 
@@ -144,7 +154,9 @@ plotlyWidgetPlugins.forEach((widgetPlugin) => {
   widgetPlugin.menuItems = [
     pluginMenuItemRemoveWidget.key,
     pluginMenuItemDuplicateWidget.key,
-    "save-as",
+    pluginMenuItemSynchronizeSavedWidget.key,
+    pluginMenuItemSaveWidget.key,
+    pluginMenuItemSaveWidgetAs.key,
   ];
   widgetPlugin.titleBarButtons = [
     pluginTitleBarButtonFullScreen.key,
@@ -177,31 +189,51 @@ pluginWidgetTreeTable.cellStyle = pluginCellStylePivotTable.key;
     tableWidget.menuItems = [
       pluginMenuItemRemoveWidget.key,
       pluginMenuItemDuplicateWidget.key,
-      "save-as",
+      pluginMenuItemSynchronizeSavedWidget.key,
+      pluginMenuItemSaveWidget.key,
+      pluginMenuItemSaveWidgetAs.key,
     ];
     tableWidget.titleBarButtons = [
       pluginTitleBarButtonFullScreen.key,
       pluginTitleBarButtonToggleQueryMode.key,
     ];
-    tableWidget.contextMenuItems = [
-      pluginMenuItemFilterOnEverythingButSelection.key,
-      pluginMenuItemFilterOnSelection.key,
-      pluginMenuItemOpenDrillthrough.key,
-      pluginMenuItemSortPivotTableAscendingly.key,
-      pluginMenuItemSortPivotTableDescendingly.key,
-      pluginMenuItemRemoveSort.key,
-      pluginMenuItemCopyQuery.key,
-      pluginMenuItemShowHideTotals.key,
-      pluginMenuItemRefreshQuery.key,
-      pluginMenuItemExportToCsv.key,
-    ];
   }
 );
+
+const contextMenuItemsForTables = [
+  pluginMenuItemFilterOnEverythingButSelection.key,
+  pluginMenuItemFilterOnSelection.key,
+  pluginMenuItemOpenDrillthrough.key,
+  pluginMenuItemRemoveSort.key,
+  pluginMenuItemCopyQuery.key,
+  pluginMenuItemShowHideTotals.key,
+  pluginMenuItemRefreshQuery.key,
+  pluginMenuItemExportToCsv.key,
+  pluginMenuItemHideColumns.key,
+];
+
+// Pivot Tables and Tree Tables have a non-breaking sort
+[pluginWidgetPivotTable, pluginWidgetTreeTable].forEach((tableWidget) => {
+  tableWidget.contextMenuItems = [
+    pluginMenuItemSortPivotTableAscendingly.key,
+    pluginMenuItemSortPivotTableDescendingly.key,
+    ...contextMenuItemsForTables,
+  ];
+});
+
+// Tables have a breaking sort
+pluginWidgetTable.contextMenuItems = [
+  pluginMenuItemSortTableAscendingly.key,
+  pluginMenuItemSortTableDescendingly.key,
+  ...contextMenuItemsForTables,
+];
 
 pluginWidgetDrillthroughTable.menuItems = [
   pluginMenuItemRemoveWidget.key,
   pluginMenuItemDuplicateWidget.key,
-  "save-as",
+  pluginMenuItemSynchronizeSavedWidget.key,
+  pluginMenuItemSaveWidget.key,
+  pluginMenuItemSaveWidgetAs.key,
 ];
 pluginWidgetDrillthroughTable.titleBarButtons = [
   pluginTitleBarButtonFullScreen.key,
@@ -217,7 +249,9 @@ pluginWidgetDrillthroughTable.cellStyle = pluginCellStyleDrillthroughTable.key;
 pluginWidgetKpi.menuItems = [
   pluginMenuItemRemoveWidget.key,
   pluginMenuItemDuplicateWidget.key,
-  "save-as",
+  pluginMenuItemSynchronizeSavedWidget.key,
+  pluginMenuItemSaveWidget.key,
+  pluginMenuItemSaveWidgetAs.key,
 ];
 pluginWidgetKpi.titleBarButtons = [
   pluginTitleBarButtonFullScreen.key,
@@ -227,19 +261,15 @@ pluginWidgetKpi.contextMenuItems = [
   pluginMenuItemCopyQuery.key,
   pluginMenuItemRefreshQuery.key,
   pluginMenuItemExportToCsv.key,
+  pluginMenuItemShowHideTotals.key,
+  pluginMenuItemFilterOnSelection.key,
+  pluginMenuItemFilterOnEverythingButSelection.key,
+  pluginMenuItemOpenDrillthrough.key,
 ];
-
-pluginWidgetQuickFilter.menuItems = [
-  pluginMenuItemRemoveWidget.key,
-  pluginMenuItemSwitchQuickFilterMode.key,
-];
-pluginWidgetQuickFilter.titleBarButtons = [pluginTitleBarButtonFullScreen.key];
-pluginWidgetQuickFilter.contextMenuItems = [];
 
 export const plugins: PluginRegistry = {
   cell: _keyBy(cellPlugins, "key"),
   "cell-style": _keyBy(cellStylePlugins, "key"),
-  "selection-listener": _keyBy([], "key"),
   "menu-item": _keyBy(menuItemPlugins, "key"),
   "titlebar-button": _keyBy(titleBarButtonPlugins, "key"),
   widget: _keyBy(widgetPlugins, "key"),

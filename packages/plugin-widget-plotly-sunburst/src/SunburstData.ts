@@ -9,15 +9,17 @@ export interface SunburstData {
 }
 
 /**
- *
+ * A node that represents one level in the hierarchy of data
  */
 export class Node {
   children: Map<string, Node> = new Map();
-  value: number = 0;
-  label: string = "";
   id: string = uuidv4();
+  value: number;
+  label: string;
   /**
-   *
+   * Create a Node with a random id
+   * @param {string} label - The label of the node
+   * @param {number} value - The value of the node
    */
   constructor(label: string, value: number) {
     this.value = value;
@@ -26,7 +28,9 @@ export class Node {
 }
 
 /**
- *
+ * Extracts measure data from a cellset
+ * @param {CellSet} data The CellSet or undefined
+ * @returns {Node} the root node of a tree that represents the levels of the hierchy
  */
 export function extractData(data?: CellSet): Node | null {
   if (data == null) return null;
@@ -51,8 +55,6 @@ export function extractData(data?: CellSet): Node | null {
     .map((position) => position.map((pos) => pos.namePath))
     .map((position) => position.flat().filter((label) => label !== "AllMember"))
     .slice(1);
-
-  console.log(positions);
 
   for (let posidx = 0; posidx < positions.length; posidx++) {
     const subpositions = positions[posidx];

@@ -1,1 +1,1 @@
-export { pluginWidgetPlotlySunburst } from "./pluginWidgetPlotlySunburst";
+export { pluginWidgetPlotlySunburst } from "./pluginWidgetPlotlySunburst.js";
