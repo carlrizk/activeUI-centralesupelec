@@ -1,38 +1,12 @@
 import { CellSet } from "@activeviam/activeui-sdk";
-import { v4 as uuidv4 } from "uuid";
-
-export interface SunburstData {
-  ids: string[];
-  labels: string[];
-  parents: string[];
-  values: number[];
-}
-
-/**
- * A node that represents one level in the hierarchy of data
- */
-export class Node {
-  children: Map<string, Node> = new Map();
-  id: string = uuidv4();
-  value: number;
-  label: string;
-  /**
-   * Create a Node with a random id
-   * @param {string} label - The label of the node
-   * @param {number} value - The value of the node
-   */
-  constructor(label: string, value: number) {
-    this.value = value;
-    this.label = label;
-  }
-}
+import { DataNode } from "./common.types.js";
 
 /**
  * Extracts measure data from a cellset
  * @param {CellSet} data The CellSet or undefined
- * @returns {Node} the root node of a tree that represents the levels of the hierchy
+ * @returns {DataNode} the root node of a tree that represents the levels of the hierchy
  */
-export function extractData(data?: CellSet): Node | null {
+export function extractHierarchyData(data?: CellSet): DataNode | null {
   if (data == null) return null;
 
   const columnsAxis = data.axes.at(0);
@@ -49,7 +23,7 @@ export function extractData(data?: CellSet): Node | null {
   const total = values[0];
   values = values.slice(1);
 
-  const result: Node = new Node("Total", total);
+  const result: DataNode = new DataNode("Total", total);
 
   const positions = rowAxis.positions
     .map((position) => position.map((pos) => pos.namePath))
@@ -62,7 +36,10 @@ export function extractData(data?: CellSet): Node | null {
     for (let subposidx = 0; subposidx < subpositions.length; subposidx++) {
       const subposition = subpositions[subposidx];
       if (!cursor.children.has(subposition)) {
-        cursor.children.set(subposition, new Node(subposition, values[posidx]));
+        cursor.children.set(
+          subposition,
+          new DataNode(subposition, values[posidx])
+        );
       }
       cursor = cursor.children.get(subposition) ?? result;
     }
