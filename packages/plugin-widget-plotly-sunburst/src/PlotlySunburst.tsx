@@ -26,21 +26,22 @@ export const PlotlySunburst = withQueryResult(
         parents: [],
         values: [],
       };
+
+      function addNodetoChart(node: DataNode, parent: DataNode | null): void {
+        sunburstdata.ids.push(node.id);
+        sunburstdata.labels.push(node.label);
+        sunburstdata.parents.push(parent === null ? "" : parent.id);
+        sunburstdata.values.push(node.value);
+      }
+
+      function addNodeChildrentoChartRecursive(node: DataNode): void {
+        node.children.forEach((childnode) => {
+          addNodetoChart(childnode, node);
+          addNodeChildrentoChartRecursive(childnode);
+        });
+      }
+
       if (rootNode != null) {
-        function addNodetoChart(node: DataNode, parent: DataNode | null): void {
-          sunburstdata.ids.push(node.id);
-          sunburstdata.labels.push(node.label);
-          sunburstdata.parents.push(parent === null ? "" : parent.id);
-          sunburstdata.values.push(node.value);
-        }
-
-        function addNodeChildrentoChartRecursive(node: DataNode): void {
-          node.children.forEach((childnode) => {
-            addNodetoChart(childnode, node);
-            addNodeChildrentoChartRecursive(childnode);
-          });
-        }
-
         addNodetoChart(rootNode, null);
         addNodeChildrentoChartRecursive(rootNode);
       }
