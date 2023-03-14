@@ -19,8 +19,8 @@
   "dependencies": {
     "@activeui-cs/common": "0.0.1",
     "@activeui-cs/react-utils": "0.0.1",
-    "@activeviam/activeui-sdk": "5.1.0",
-    "@activeviam/chart": "5.1.0",
+    "@activeviam/activeui-sdk": "5.1.1",
+    "@activeviam/chart": "5.1.1",
     "@rehooks/component-size": "^1.0.3",
     "antd": "^5.1.0",
     "react": "^18.0.0"
