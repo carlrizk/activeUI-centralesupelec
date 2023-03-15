@@ -5,7 +5,7 @@ import {
 } from "@activeviam/activeui-sdk";
 import { PlotlyWidgetState, withoutIrrelevantRenders } from "@activeviam/chart";
 import useComponentSize from "@rehooks/component-size";
-import { Spin } from "antd";
+import { Spin, Alert, Space } from "antd";
 import { memo, useRef } from "react";
 import {
   extractHierarchyData,
@@ -27,23 +27,34 @@ export const PlotlySunburst = withQueryResult(
         values: [],
       };
 
-      function addNodetoChart(node: DataNode, parent: DataNode | null): void {
+      function addNodetoChart(
+        node: DataNode,
+        parent: DataNode | null
+      ): boolean {
+        if (node.value <= 0) return false;
         sunburstdata.ids.push(node.id);
         sunburstdata.labels.push(node.label);
         sunburstdata.parents.push(parent === null ? "" : parent.id);
         sunburstdata.values.push(node.value);
+        return true;
       }
 
-      function addNodeChildrentoChartRecursive(node: DataNode): void {
+      function addNodeChildrentoChartRecursive(node: DataNode): boolean {
+        if (node.value <= 0) return false;
         node.children.forEach((childnode) => {
-          addNodetoChart(childnode, node);
-          addNodeChildrentoChartRecursive(childnode);
+          if (!addNodetoChart(childnode, node)) return false;
+          if (!addNodeChildrentoChartRecursive(childnode)) return false;
         });
+        return true;
       }
 
+      let doesNotContainNegativeValue = true;
       if (rootNode != null) {
-        addNodetoChart(rootNode, null);
-        addNodeChildrentoChartRecursive(rootNode);
+        if (
+          !addNodetoChart(rootNode, null) ||
+          !addNodeChildrentoChartRecursive(rootNode)
+        )
+          doesNotContainNegativeValue = false;
       }
 
       const container = useRef<HTMLDivElement>(null);
@@ -63,7 +74,7 @@ export const PlotlySunburst = withQueryResult(
             <div>{error.stackTrace}</div>
           ) : isLoading ? (
             <Spin />
-          ) : (
+          ) : doesNotContainNegativeValue ? (
             <PlotBase
               data={[
                 {
@@ -72,6 +83,7 @@ export const PlotlySunburst = withQueryResult(
                   labels: sunburstdata.labels,
                   parents: sunburstdata.parents,
                   values: sunburstdata.values,
+                  branchvalues: "total",
                 },
               ]}
               layout={{
@@ -79,6 +91,15 @@ export const PlotlySunburst = withQueryResult(
                 width: width - 25,
               }}
             />
+          ) : (
+            <Space direction="vertical" style={{ width: "100%" }}>
+              <Alert
+                message="Warning : measure with negative values!"
+                type="warning"
+                showIcon
+                closable
+              />
+            </Space>
           )}
         </div>
       );
