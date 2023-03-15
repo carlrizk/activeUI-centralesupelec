@@ -1,3 +1,4 @@
+import { DataNode, extractCellSetData } from "@activeui-cs/common";
 import { PlotBase } from "@activeui-cs/react-utils";
 import {
   WidgetWithQueryProps,
@@ -7,11 +8,7 @@ import { PlotlyWidgetState, withoutIrrelevantRenders } from "@activeviam/chart";
 import useComponentSize from "@rehooks/component-size";
 import { Spin } from "antd";
 import { memo, useRef } from "react";
-import {
-  extractHierarchyData,
-  DataNode,
-  HierarchyData,
-} from "@activeui-cs/common";
+import { SunburstData } from "./SunburstData.js";
 
 /* eslint-disable react/display-name */
 export const PlotlySunburst = withQueryResult(
@@ -19,8 +16,8 @@ export const PlotlySunburst = withQueryResult(
     memo((props: WidgetWithQueryProps<PlotlyWidgetState>) => {
       const { data, error, isLoading } = props.queryResult;
 
-      const rootNode = extractHierarchyData(data);
-      const sunburstdata: HierarchyData = {
+      const cellSetData = data ? extractCellSetData(data) : null;
+      const sunburstdata: SunburstData = {
         ids: [],
         labels: [],
         parents: [],
@@ -31,7 +28,7 @@ export const PlotlySunburst = withQueryResult(
         sunburstdata.ids.push(node.id);
         sunburstdata.labels.push(node.label);
         sunburstdata.parents.push(parent === null ? "" : parent.id);
-        sunburstdata.values.push(node.value);
+        sunburstdata.values.push(node.values[0]);
       }
 
       function addNodeChildrentoChartRecursive(node: DataNode): void {
@@ -41,9 +38,9 @@ export const PlotlySunburst = withQueryResult(
         });
       }
 
-      if (rootNode != null) {
-        addNodetoChart(rootNode, null);
-        addNodeChildrentoChartRecursive(rootNode);
+      if (cellSetData != null) {
+        addNodetoChart(cellSetData.rootNode, null);
+        addNodeChildrentoChartRecursive(cellSetData.rootNode);
       }
 
       const container = useRef<HTMLDivElement>(null);

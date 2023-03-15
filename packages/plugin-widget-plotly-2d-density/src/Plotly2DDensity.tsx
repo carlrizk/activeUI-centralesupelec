@@ -1,4 +1,4 @@
-import { extractData } from "@activeui-cs/common";
+import { extractCellSetData, MeasureData } from "@activeui-cs/common";
 import { PlotBase, PlotParams } from "@activeui-cs/react-utils";
 import {
   WidgetWithQueryProps,
@@ -14,8 +14,12 @@ export const Plotly2DDensity = withQueryResult(
     memo((props: WidgetWithQueryProps<PlotlyWidgetState>) => {
       const { data, error, isLoading } = props.queryResult;
 
-      const extractedData = extractData(data);
+      let extractedData: MeasureData[] = [];
 
+      if (data != undefined) {
+        const cellSetData = extractCellSetData(data!);
+        if (cellSetData != null) extractedData = cellSetData.getMeasureData();
+      }
       const firstMeasure =
         extractedData.length >= 1 ? extractedData[0].values : [];
       const secondMeasure =
