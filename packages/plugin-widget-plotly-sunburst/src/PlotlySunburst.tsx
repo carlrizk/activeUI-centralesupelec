@@ -41,10 +41,10 @@ export const PlotlySunburst = withQueryResult(
 
       function addNodeChildrentoChartRecursive(node: DataNode): boolean {
         if (node.value <= 0) return false;
-        node.children.forEach((childnode) => {
+        for (let [, childnode] of node.children) {
           if (!addNodetoChart(childnode, node)) return false;
           if (!addNodeChildrentoChartRecursive(childnode)) return false;
-        });
+        }
         return true;
       }
 
