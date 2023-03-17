@@ -16,7 +16,10 @@ export const PlotlySunburst = withQueryResult(
     memo((props: WidgetWithQueryProps<PlotlyWidgetState>) => {
       const { data, error, isLoading } = props.queryResult;
 
+      let currentID = 0;
+
       const cellSetData = data ? extractCellSetData(data) : null;
+
       const sunburstdata: SunburstData = {
         ids: [],
         labels: [],
@@ -24,23 +27,44 @@ export const PlotlySunburst = withQueryResult(
         values: [],
       };
 
-      function addNodetoChart(node: DataNode, parent: DataNode | null): void {
-        sunburstdata.ids.push(node.id);
-        sunburstdata.labels.push(node.label);
-        sunburstdata.parents.push(parent === null ? "" : parent.id);
-        sunburstdata.values.push(node.values[0]);
+      function addNodetoChart(
+        nodeId: number,
+        nodeLabel: string,
+        nodeValue: number,
+        parentId: number | ""
+      ): void {
+        sunburstdata.ids.push(nodeId.toString());
+        sunburstdata.labels.push(nodeLabel);
+        sunburstdata.parents.push(parentId.toString());
+        sunburstdata.values.push(nodeValue);
+        currentID += 1;
       }
 
-      function addNodeChildrentoChartRecursive(node: DataNode): void {
-        node.children.forEach((childnode) => {
-          addNodetoChart(childnode, node);
-          addNodeChildrentoChartRecursive(childnode);
+      function addNodeChildrentoChartRecursive(
+        parentId: number,
+        node: DataNode
+      ): void {
+        node.getChildren().forEach((childnode) => {
+          let id = currentID;
+          addNodetoChart(
+            id,
+            childnode.getLabel(),
+            childnode.getValues()[0],
+            parentId
+          );
+          addNodeChildrentoChartRecursive(id, childnode);
         });
       }
 
       if (cellSetData != null) {
-        addNodetoChart(cellSetData.rootNode, null);
-        addNodeChildrentoChartRecursive(cellSetData.rootNode);
+        let id = currentID;
+        addNodetoChart(
+          id,
+          cellSetData.rootNode.getLabel(),
+          cellSetData.rootNode.getValues()[0],
+          ""
+        );
+        addNodeChildrentoChartRecursive(id, cellSetData.rootNode);
       }
 
       const container = useRef<HTMLDivElement>(null);
@@ -69,6 +93,8 @@ export const PlotlySunburst = withQueryResult(
                   labels: sunburstdata.labels,
                   parents: sunburstdata.parents,
                   values: sunburstdata.values,
+                  // @ts-expect-error
+                  sort: false,
                 },
               ]}
               layout={{

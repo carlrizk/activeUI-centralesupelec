@@ -6,6 +6,11 @@ interface Axes {
   hierarchies: Axis | null;
 }
 
+interface PositionWithValues {
+  position: string[];
+  values: number[];
+}
+
 function extractAxes(axes: Axis[]): Axes {
   let measures = null;
   let hierarchies = null;
@@ -24,6 +29,51 @@ function extractAxes(axes: Axis[]): Axes {
   };
 }
 
+function groupByLength(array: PositionWithValues[]) {
+  return array.reduce((map, element) => {
+    if (!map.has(element.position.length)) {
+      map.set(element.position.length, []);
+    }
+    map.get(element.position.length)!.push(element);
+    return map;
+  }, new Map<number, PositionWithValues[]>());
+}
+
+function groupPositionsByLength(
+  positions: PositionWithValues[]
+): PositionWithValues[][] {
+  const positionsGroupedByLength = groupByLength(positions);
+  const lenghts = Array.from(positionsGroupedByLength.keys()).sort();
+  const result = [];
+  for (let length of lenghts) {
+    result.push(positionsGroupedByLength.get(length)!);
+  }
+  return result;
+}
+
+function extractPositionsFromAxis(axis: Axis) {
+  return axis.positions
+    .map((position) => position.map((pos) => pos.namePath))
+    .map((position) =>
+      position.flat().filter((label) => label !== "AllMember")
+    );
+}
+
+function addNodeToCellSetData(
+  cellSetData: CellSetData,
+  path: string[],
+  values: number[]
+) {
+  let parentNodes = path.slice(0, path.length - 1);
+  let label = path.at(-1)!;
+
+  let cursor = cellSetData.rootNode;
+  for (let parentNode of parentNodes) {
+    cursor = cursor.getChild(parentNode)!;
+  }
+  cursor.addChild(label, new DataNode(label, values));
+}
+
 export function extractCellSetData(cellSet: CellSet): CellSetData | null {
   if (cellSet.axes.length === 0) return null;
 
@@ -32,41 +82,34 @@ export function extractCellSetData(cellSet: CellSet): CellSetData | null {
   const measures: string[] =
     axes.measures?.positions.map((pos) => pos[0].namePath[0]) ?? [];
 
-  const totals = cellSet.cells
-    .slice(0, measures.length)
-    .map((cell) => cell.value as number);
+  const values = cellSet.cells.map((cell) => cell.value as number);
 
-  const values = cellSet.cells
-    .slice(measures.length)
-    .map((cell) => cell.value as number);
+  if (axes.hierarchies === null) return null;
 
+  const positionsWithValues: PositionWithValues[] = extractPositionsFromAxis(
+    axes.hierarchies
+  ).map((pos) => {
+    return {
+      position: pos,
+      values: values.splice(0, measures.length),
+    };
+  });
+
+  const positionsGroupedByLength = groupPositionsByLength(positionsWithValues);
+
+  const total = positionsGroupedByLength.splice(0, 1)[0][0];
   const cellSetData: CellSetData = new CellSetData(
-    new DataNode("Total", totals),
+    new DataNode("Total", total.values),
     measures
   );
 
-  if (axes.hierarchies === null) return cellSetData;
-
-  const positions = axes.hierarchies.positions
-    .map((position) => position.map((pos) => pos.namePath))
-    .map((position) => position.flat().filter((label) => label !== "AllMember"))
-    .slice(1);
-
-  for (let posidx = 0; posidx < positions.length; posidx++) {
-    const subpositions = positions[posidx];
-    let cursor = cellSetData.rootNode;
-    for (let subposidx = 0; subposidx < subpositions.length; subposidx++) {
-      const subposition = subpositions[subposidx];
-      if (!cursor.children.has(subposition)) {
-        cursor.children.set(
-          subposition,
-          new DataNode(
-            subposition,
-            values.splice(0, cellSetData.measures.length)
-          )
-        );
-      }
-      cursor = cursor.children.get(subposition) ?? cellSetData.rootNode;
+  for (let treeLevel of positionsGroupedByLength) {
+    for (let nodeHierarchy of treeLevel) {
+      addNodeToCellSetData(
+        cellSetData,
+        nodeHierarchy.position,
+        nodeHierarchy.values
+      );
     }
   }
 

@@ -1,5 +1,3 @@
-import { v4 as uuidv4 } from "uuid";
-
 export interface MeasureData {
   measureName: string;
   total: number;
@@ -15,13 +13,13 @@ export class CellSetData {
     // Second dimension is the measure
     const values: number[][] = this.rootNode
       .getLeafNodes()
-      .map((node) => node.values);
+      .map((node) => node.getValues());
 
     for (let i = 0; i < this.measures.length; i++) {
       result.push({
         measureName: this.measures[i],
         values: values.map((measureValues) => measureValues[i]),
-        total: this.rootNode.values[i],
+        total: this.rootNode.getValues()[i],
       });
     }
 
@@ -30,17 +28,39 @@ export class CellSetData {
 }
 
 export class DataNode {
-  children: Map<string, DataNode> = new Map();
-  id: string = uuidv4();
-  values: number[];
-  label: string;
+  private children: Map<string, DataNode> = new Map();
+  private childrenOrder: string[] = [];
+  private values: number[];
+  private label: string;
+
   constructor(label: string, values: number[]) {
     this.values = values;
     this.label = label;
   }
 
+  getLabel(): string {
+    return this.label;
+  }
+
+  addChild(key: string, node: DataNode) {
+    this.children.set(key, node);
+    this.childrenOrder.push(key);
+  }
+
+  getChild(key: string) {
+    return this.children.get(key);
+  }
+
+  getChildren(): DataNode[] {
+    return this.childrenOrder.map((order) => this.children.get(order)!);
+  }
+
   hasChildren(): boolean {
     return this.children.size !== 0;
+  }
+
+  getValues(): number[] {
+    return this.values;
   }
 
   getLeafNodes(): DataNode[] {
