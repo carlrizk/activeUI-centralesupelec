@@ -28,10 +28,10 @@ export class CellSetData {
 }
 
 export class DataNode {
-  private children: Map<string, DataNode> = new Map();
-  private childrenOrder: string[] = [];
-  private values: number[];
-  private label: string;
+  private readonly children: Map<string, DataNode> = new Map();
+  private readonly childrenOrder: string[] = [];
+  private readonly values: number[];
+  private readonly label: string;
 
   constructor(label: string, values: number[]) {
     this.values = values;
@@ -42,17 +42,17 @@ export class DataNode {
     return this.label;
   }
 
-  addChild(key: string, node: DataNode) {
+  addChild(key: string, node: DataNode): void {
     this.children.set(key, node);
     this.childrenOrder.push(key);
   }
 
-  getChild(key: string) {
+  getChild(key: string): DataNode | undefined {
     return this.children.get(key);
   }
 
   getChildren(): DataNode[] {
-    return this.childrenOrder.map((order) => this.children.get(order)!);
+    return this.childrenOrder.map((order) => this.children.get(order)!); // eslint-disable-line @typescript-eslint/no-non-null-assertion
   }
 
   hasChildren(): boolean {

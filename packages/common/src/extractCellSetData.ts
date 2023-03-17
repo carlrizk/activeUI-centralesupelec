@@ -29,12 +29,14 @@ function extractAxes(axes: Axis[]): Axes {
   };
 }
 
-function groupByLength(array: PositionWithValues[]) {
+function groupByLength(
+  array: PositionWithValues[]
+): Map<number, PositionWithValues[]> {
   return array.reduce((map, element) => {
     if (!map.has(element.position.length)) {
       map.set(element.position.length, []);
     }
-    map.get(element.position.length)!.push(element);
+    map.get(element.position.length)!.push(element); // eslint-disable-line @typescript-eslint/no-non-null-assertion
     return map;
   }, new Map<number, PositionWithValues[]>());
 }
@@ -43,15 +45,15 @@ function groupPositionsByLength(
   positions: PositionWithValues[]
 ): PositionWithValues[][] {
   const positionsGroupedByLength = groupByLength(positions);
-  const lenghts = Array.from(positionsGroupedByLength.keys()).sort();
+  const lenghts = Array.from(positionsGroupedByLength.keys()).sort(undefined);
   const result = [];
-  for (let length of lenghts) {
-    result.push(positionsGroupedByLength.get(length)!);
+  for (const length of lenghts) {
+    result.push(positionsGroupedByLength.get(length)!); // eslint-disable-line @typescript-eslint/no-non-null-assertion
   }
   return result;
 }
 
-function extractPositionsFromAxis(axis: Axis) {
+function extractPositionsFromAxis(axis: Axis): string[][] {
   return axis.positions
     .map((position) => position.map((pos) => pos.namePath))
     .map((position) =>
@@ -63,13 +65,13 @@ function addNodeToCellSetData(
   cellSetData: CellSetData,
   path: string[],
   values: number[]
-) {
-  let parentNodes = path.slice(0, path.length - 1);
-  let label = path.at(-1)!;
+): void {
+  const parentNodes = path.slice(0, path.length - 1);
+  const label = path.at(-1)!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
 
   let cursor = cellSetData.rootNode;
-  for (let parentNode of parentNodes) {
-    cursor = cursor.getChild(parentNode)!;
+  for (const parentNode of parentNodes) {
+    cursor = cursor.getChild(parentNode)!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
   }
   cursor.addChild(label, new DataNode(label, values));
 }
@@ -84,7 +86,8 @@ export function extractCellSetData(cellSet: CellSet): CellSetData | null {
 
   const values = cellSet.cells.map((cell) => cell.value as number);
 
-  if (axes.hierarchies === null) return null;
+  if (axes.hierarchies === null)
+    return new CellSetData(new DataNode("Total", values), measures);
 
   const positionsWithValues: PositionWithValues[] = extractPositionsFromAxis(
     axes.hierarchies
@@ -103,8 +106,8 @@ export function extractCellSetData(cellSet: CellSet): CellSetData | null {
     measures
   );
 
-  for (let treeLevel of positionsGroupedByLength) {
-    for (let nodeHierarchy of treeLevel) {
+  for (const treeLevel of positionsGroupedByLength) {
+    for (const nodeHierarchy of treeLevel) {
       addNodeToCellSetData(
         cellSetData,
         nodeHierarchy.position,
