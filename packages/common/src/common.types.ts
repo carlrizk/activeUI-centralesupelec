@@ -22,6 +22,7 @@ export class CellSetData {
   getMeasureData(): MeasureData[] {
     const result: MeasureData[] = [];
 
+    // The two dimensional table with dimensions (number of leaf nodes x number of measures)
     const values: number[][] = this.rootNode
       .getLeafNodes()
       .map((node) => node.getValues());

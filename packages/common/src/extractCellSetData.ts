@@ -61,6 +61,10 @@ function extractPositionsFromAxis(axis: Axis): string[][] {
     );
 }
 
+/**
+ * Add a node to the CellSetData. the path represents the path to take to arrive to the leaf node
+ * to which the new new node will be a child of
+ */
 function addNodeToCellSetData(
   cellSetData: CellSetData,
   path: string[],
@@ -84,16 +88,21 @@ function addNodeToCellSetData(
 export function extractCellSetData(cellSet: CellSet): CellSetData | null {
   if (cellSet.axes.length === 0) return null;
 
+  // Seperate the measures from the hierarchies
   const axes = extractAxes(cellSet.axes);
 
+  // Map the measures to their names
   const measures: string[] =
     axes.measures?.positions.map((pos) => pos[0].namePath[0]) ?? [];
 
+  // Get all the numerical values for the data
   const values = cellSet.cells.map((cell) => cell.value as number);
 
+  // If only measures are selected, return the total for the measures
   if (axes.hierarchies === null)
     return new CellSetData(new DataNode("Total", values), measures);
 
+  // Associate each position with the corresponding values
   const positionsWithValues: PositionWithValues[] = extractPositionsFromAxis(
     axes.hierarchies
   ).map((pos) => {
@@ -103,14 +112,22 @@ export function extractCellSetData(cellSet: CellSet): CellSetData | null {
     };
   });
 
+  // Group the positions by length and sort them from shortest to longest.
+  // The length of the position represents the layer in the tree.
+  // Length 0: root node
+  // Length 1: The children of the root node
+  // Length 2: The grandchildren of the root node
+  // etc...
   const positionsGroupedByLength = groupPositionsByLength(positionsWithValues);
 
+  // Get the first position which represents the root node
   const total = positionsGroupedByLength.splice(0, 1)[0][0];
   const cellSetData: CellSetData = new CellSetData(
     new DataNode("Total", total.values),
     measures
   );
 
+  // For each layer and each node in the layer add the node to the returned data
   for (const treeLevel of positionsGroupedByLength) {
     for (const nodeHierarchy of treeLevel) {
       addNodeToCellSetData(
