@@ -14,8 +14,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "start": "tsc --watch",
-    "prettier:write": "prettier --write .",
-    "test": "jest ./src"
+    "prettier:write": "prettier --write ."
   },
   "dependencies": {
     "@activeviam/activeui-sdk": "5.1.1"
