@@ -16,9 +16,9 @@ export const Plotly2DDensity = withQueryResult(
 
       let extractedData: MeasureData[] = [];
 
-      if (data != undefined) {
-        const cellSetData = extractCellSetData(data!);
-        if (cellSetData != null) extractedData = cellSetData.getMeasureData();
+      if (data !== undefined) {
+        const cellSetData = extractCellSetData(data);
+        if (cellSetData !== null) extractedData = cellSetData.getMeasureData();
       }
       const firstMeasure =
         extractedData.length >= 1 ? extractedData[0].values : [];

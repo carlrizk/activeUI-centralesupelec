@@ -1,4 +1,4 @@
-import { extractCellSetData } from "@activeui-cs/common";
+import { CellSetData, extractCellSetData } from "@activeui-cs/common";
 import { PlotBase } from "@activeui-cs/react-utils";
 import {
   WidgetWithQueryProps,
@@ -17,14 +17,13 @@ export const PlotlySunburst = withQueryResult(
     memo((props: WidgetWithQueryProps<PlotlyWidgetState>) => {
       const { data, error, isLoading } = props.queryResult;
 
-      const cellSetData = data ? extractCellSetData(data) : null;
-      let sunburstData = new SunburstData();
+      let cellSetData: CellSetData | null = null;
+      if (data != null) cellSetData = extractCellSetData(data);
 
+      let sunburstData = new SunburstData();
       if (cellSetData != null) {
         sunburstData = createSunburstData(cellSetData);
       }
-
-      console.log(sunburstData);
 
       const container = useRef<HTMLDivElement>(null);
       // @ts-expect-error

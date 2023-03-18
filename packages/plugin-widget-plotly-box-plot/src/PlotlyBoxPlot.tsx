@@ -18,9 +18,9 @@ export const PlotlyBoxPlot = withQueryResult(
 
       let extractedData: MeasureData[] = [];
 
-      if (data != undefined) {
-        const cellSetData = extractCellSetData(data!);
-        if (cellSetData != null) extractedData = cellSetData.getMeasureData();
+      if (data !== undefined) {
+        const cellSetData = extractCellSetData(data);
+        if (cellSetData !== null) extractedData = cellSetData.getMeasureData();
       }
 
       const showAxis = extractedData.length > 0;

@@ -76,6 +76,11 @@ function addNodeToCellSetData(
   cursor.addChild(label, new DataNode(label, values));
 }
 
+/**
+ * Creates a CellSetData tree from the CellSet.
+ * @param {CellSet} cellSet
+ * @return The CellSetData tree.
+ */
 export function extractCellSetData(cellSet: CellSet): CellSetData | null {
   if (cellSet.axes.length === 0) return null;
 

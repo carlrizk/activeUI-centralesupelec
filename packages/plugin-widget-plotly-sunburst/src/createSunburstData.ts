@@ -1,10 +1,14 @@
 import { CellSetData, DataNode } from "@activeui-cs/common";
 import { SunburstData } from "./sunburst.types.js";
 
+/**
+ * @param {CellSetData} cellSetData
+ * @returns The SunburstData object ready to be used by a Sunburst plot.
+ */
 export function createSunburstData(cellSetData: CellSetData): SunburstData {
   const sunburstdata = new SunburstData();
 
-  let nodeId = addNodeToSunburstData(sunburstdata, cellSetData.rootNode, "");
+  const nodeId = addNodeToSunburstData(sunburstdata, cellSetData.rootNode, "");
   addNodeChildrenToSunburstDataRecursive(
     sunburstdata,
     cellSetData.rootNode,
@@ -20,7 +24,7 @@ function addNodeChildrenToSunburstDataRecursive(
   parentId: number
 ): void {
   node.getChildren().forEach((childnode) => {
-    let nodeId = addNodeToSunburstData(sunburstData, childnode, parentId);
+    const nodeId = addNodeToSunburstData(sunburstData, childnode, parentId);
     addNodeChildrenToSunburstDataRecursive(sunburstData, childnode, nodeId);
   });
 }
