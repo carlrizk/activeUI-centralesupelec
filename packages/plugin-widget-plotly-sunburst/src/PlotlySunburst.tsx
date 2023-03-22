@@ -25,6 +25,16 @@ export const PlotlySunburst = withQueryResult(
         sunburstData = createSunburstData(cellSetData);
       }
 
+      const hasMeasures =
+        cellSetData != null && cellSetData?.measures.length !== 0;
+
+      if (hasMeasures && cellSetData !== null) {
+        const measureName = cellSetData.measures[0];
+        sunburstData.getLabels()[0] = measureName;
+      } else {
+        sunburstData.getLabels()[0] = "";
+      }
+
       const container = useRef<HTMLDivElement>(null);
       // @ts-expect-error
       const { height, width } = useComponentSize(container);
@@ -50,7 +60,7 @@ export const PlotlySunburst = withQueryResult(
                   ids: sunburstData.getIDs(),
                   labels: sunburstData.getLabels(),
                   parents: sunburstData.getParents(),
-                  values: sunburstData.getValues(),
+                  values: hasMeasures ? sunburstData.getValues() : undefined,
                   branchvalues: "total",
                   // @ts-expect-error
                   sort: false,
