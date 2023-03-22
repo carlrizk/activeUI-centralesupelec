@@ -25,6 +25,25 @@ export const PlotlySunburst = withQueryResult(
         sunburstData = createSunburstData(cellSetData);
       }
 
+      const hasMeasures =
+        cellSetData != null && cellSetData?.measures.length !== 0;
+
+      if (hasMeasures) {
+        const measureName = cellSetData!.measures[0];
+        sunburstData.getLabels()[0] = measureName;
+      } else {
+        sunburstData.getLabels()[0] = "";
+
+        const parents = sunburstData.getParents();
+        const values = sunburstData.getValues();
+        for (let i = parents.length - 1; i >= 0; i--) {
+          const parent = parents[i];
+          values[i] = values[i] === 0 ? 1 : values[i];
+          const parentId = parseInt(parent);
+          if (!isNaN(parentId)) values[parentId] += values[i];
+        }
+      }
+
       const container = useRef<HTMLDivElement>(null);
       // @ts-expect-error
       const { height, width } = useComponentSize(container);
