@@ -28,8 +28,8 @@ export const PlotlySunburst = withQueryResult(
       const hasMeasures =
         cellSetData != null && cellSetData?.measures.length !== 0;
 
-      if (hasMeasures) {
-        const measureName = cellSetData!.measures[0]; // eslint-disable-line @typescript-eslint/no-non-null-assertion
+      if (hasMeasures && cellSetData !== null) {
+        const measureName = cellSetData.measures[0];
         sunburstData.getLabels()[0] = measureName;
       } else {
         sunburstData.getLabels()[0] = "";
