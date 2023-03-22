@@ -33,15 +33,6 @@ export const PlotlySunburst = withQueryResult(
         sunburstData.getLabels()[0] = measureName;
       } else {
         sunburstData.getLabels()[0] = "";
-
-        const parents = sunburstData.getParents();
-        const values = sunburstData.getValues();
-        for (let i = parents.length - 1; i >= 0; i--) {
-          const parent = parents[i];
-          values[i] = values[i] === 0 ? 1 : values[i];
-          const parentId = parseInt(parent);
-          if (!isNaN(parentId)) values[parentId] += values[i];
-        }
       }
 
       const container = useRef<HTMLDivElement>(null);
@@ -69,7 +60,7 @@ export const PlotlySunburst = withQueryResult(
                   ids: sunburstData.getIDs(),
                   labels: sunburstData.getLabels(),
                   parents: sunburstData.getParents(),
-                  values: sunburstData.getValues(),
+                  values: hasMeasures ? sunburstData.getValues() : undefined,
                   branchvalues: "total",
                   // @ts-expect-error
                   sort: false,
