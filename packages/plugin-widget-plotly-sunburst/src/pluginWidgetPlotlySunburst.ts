@@ -49,6 +49,7 @@ export const pluginWidgetPlotlySunburst: WidgetPlugin<
     "en-US": {
       key: "Sunburst Chart",
       defaultName: "New Sunburst Chart",
+      negativeValuesWarning: "Warning: Measure with negative values!",
     },
   },
 };

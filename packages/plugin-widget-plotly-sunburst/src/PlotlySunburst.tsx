@@ -6,8 +6,9 @@ import {
 } from "@activeviam/activeui-sdk";
 import { PlotlyWidgetState, withoutIrrelevantRenders } from "@activeviam/chart";
 import useComponentSize from "@rehooks/component-size";
-import { Spin } from "antd";
+import { Alert, Space, Spin } from "antd";
 import { memo, useRef } from "react";
+import { useIntl } from "react-intl";
 import { createSunburstData } from "./createSunburstData.js";
 import { SunburstData } from "./sunburst.types.js";
 
@@ -15,6 +16,7 @@ import { SunburstData } from "./sunburst.types.js";
 export const PlotlySunburst = withQueryResult(
   withoutIrrelevantRenders(
     memo((props: WidgetWithQueryProps<PlotlyWidgetState>) => {
+      const { formatMessage } = useIntl();
       const { data, error, isLoading } = props.queryResult;
 
       let cellSetData: CellSetData | null = null;
@@ -35,6 +37,9 @@ export const PlotlySunburst = withQueryResult(
         sunburstData.getLabels()[0] = "";
       }
 
+      const doesNotContainNegativeValue =
+        sunburstData.getValues().find((value) => value < 0) === undefined;
+
       const container = useRef<HTMLDivElement>(null);
       // @ts-expect-error
       const { height, width } = useComponentSize(container);
@@ -52,7 +57,7 @@ export const PlotlySunburst = withQueryResult(
             <div>{error.stackTrace}</div>
           ) : isLoading ? (
             <Spin />
-          ) : (
+          ) : doesNotContainNegativeValue ? (
             <PlotBase
               data={[
                 {
@@ -71,6 +76,16 @@ export const PlotlySunburst = withQueryResult(
                 width: width - 25,
               }}
             />
+          ) : (
+            <Space direction="vertical" style={{ width: "100%" }}>
+              <Alert
+                message={formatMessage({
+                  id: "aui.plugins.widget.plotly-sunburst.negativeValuesWarning",
+                })}
+                type="warning"
+                showIcon
+              />
+            </Space>
           )}
         </div>
       );
