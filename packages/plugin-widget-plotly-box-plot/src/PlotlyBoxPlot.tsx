@@ -1,4 +1,4 @@
-import { extractData } from "@activeui-cs/common";
+import { extractCellSetData, MeasureData } from "@activeui-cs/common";
 import { PlotBase, PlotParams } from "@activeui-cs/react-utils";
 import {
   WidgetWithQueryProps,
@@ -16,7 +16,12 @@ export const PlotlyBoxPlot = withQueryResult(
     memo((props: WidgetWithQueryProps<PlotlyWidgetState>) => {
       const { data, error, isLoading } = props.queryResult;
 
-      const extractedData = extractData(data);
+      let extractedData: MeasureData[] = [];
+
+      if (data !== undefined) {
+        const cellSetData = extractCellSetData(data);
+        if (cellSetData !== null) extractedData = cellSetData.getMeasureData();
+      }
 
       const showAxis = extractedData.length > 0;
 
