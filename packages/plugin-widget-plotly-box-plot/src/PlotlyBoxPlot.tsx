@@ -22,6 +22,7 @@ export const PlotlyBoxPlot = withQueryResult(
         const cellSetData = extractCellSetData(data);
         if (cellSetData !== null) extractedData = cellSetData.getMeasureData();
       }
+      const firstMeasure = extractedData.length >= 1;
 
       const container = useRef<HTMLDivElement>(null);
 
@@ -40,15 +41,32 @@ export const PlotlyBoxPlot = withQueryResult(
         }),
         layout: {
           showlegend: true,
+          autosize: true,
+          hovermode: "closest",
           height,
           width: width - 25,
           boxmode: "group",
           xaxis: {
             visible: true,
+            autotick: true,
+            zeroline: !firstMeasure,
+            range: firstMeasure ? undefined : [0, 100],
+            tickmode: firstMeasure ? "auto" : "array",
+            ticktext: firstMeasure ? undefined : ["", "", "", ""],
+            tickvals: firstMeasure ? undefined : [0, 25, 50, 75],
           },
           yaxis: {
             visible: true,
+            autotick: true,
+            zeroline: !firstMeasure,
+            range: firstMeasure ? undefined : [0, 100],
+            tickmode: firstMeasure ? "auto" : "array",
+            ticktext: firstMeasure ? undefined : ["", "", "", ""],
+            tickvals: firstMeasure ? undefined : [0, 25, 50, 75],
           },
+        },
+        config: {
+          staticPlot: !firstMeasure,
         },
       };
 
