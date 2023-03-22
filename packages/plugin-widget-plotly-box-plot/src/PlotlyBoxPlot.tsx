@@ -22,29 +22,49 @@ export const PlotlyBoxPlot = withQueryResult(
         const cellSetData = extractCellSetData(data);
         if (cellSetData !== null) extractedData = cellSetData.getMeasureData();
       }
-
-      const showAxis = extractedData.length > 0;
+      const firstMeasure = extractedData.length >= 1;
 
       const container = useRef<HTMLDivElement>(null);
+
       // @ts-expect-error
       const { height, width } = useComponentSize(container);
 
-      // Possibility to add functionalities
       const plotParams: PlotParams = {
         data: extractedData.map((result) => {
-          return { y: result.values, type: "box", name: result.measureName };
+          return {
+            y: result.values,
+            type: "box",
+            name: result.measureName,
+          };
         }),
         layout: {
           showlegend: true,
+          autosize: true,
+          hovermode: "closest",
           height,
           width: width - 25,
           boxmode: "group",
           xaxis: {
-            visible: showAxis,
+            visible: true,
+            autotick: true,
+            zeroline: !firstMeasure,
+            range: firstMeasure ? undefined : [0, 100],
+            tickmode: firstMeasure ? "auto" : "array",
+            ticktext: firstMeasure ? undefined : ["", "", "", ""],
+            tickvals: firstMeasure ? undefined : [0, 25, 50, 75],
           },
           yaxis: {
-            visible: showAxis,
+            visible: true,
+            autotick: true,
+            zeroline: !firstMeasure,
+            range: firstMeasure ? undefined : [0, 100],
+            tickmode: firstMeasure ? "auto" : "array",
+            ticktext: firstMeasure ? undefined : ["", "", "", ""],
+            tickvals: firstMeasure ? undefined : [0, 25, 50, 75],
           },
+        },
+        config: {
+          staticPlot: !firstMeasure,
         },
       };
 
