@@ -1,3 +1,4 @@
+import { CellSetData, extractCellSetData } from "@activeui-cs/common";
 import { PlotBase } from "@activeui-cs/react-utils";
 import {
   WidgetWithQueryProps,
@@ -7,11 +8,8 @@ import { PlotlyWidgetState, withoutIrrelevantRenders } from "@activeviam/chart";
 import useComponentSize from "@rehooks/component-size";
 import { Spin } from "antd";
 import { memo, useRef } from "react";
-import {
-  extractHierarchyData,
-  DataNode,
-  HierarchyData,
-} from "@activeui-cs/common";
+import { createSunburstData } from "./createSunburstData.js";
+import { SunburstData } from "./sunburst.types.js";
 
 /* eslint-disable react/display-name */
 export const PlotlySunburst = withQueryResult(
@@ -19,31 +17,12 @@ export const PlotlySunburst = withQueryResult(
     memo((props: WidgetWithQueryProps<PlotlyWidgetState>) => {
       const { data, error, isLoading } = props.queryResult;
 
-      const rootNode = extractHierarchyData(data);
-      const sunburstdata: HierarchyData = {
-        ids: [],
-        labels: [],
-        parents: [],
-        values: [],
-      };
+      let cellSetData: CellSetData | null = null;
+      if (data != null) cellSetData = extractCellSetData(data);
 
-      function addNodetoChart(node: DataNode, parent: DataNode | null): void {
-        sunburstdata.ids.push(node.id);
-        sunburstdata.labels.push(node.label);
-        sunburstdata.parents.push(parent === null ? "" : parent.id);
-        sunburstdata.values.push(node.value);
-      }
-
-      function addNodeChildrentoChartRecursive(node: DataNode): void {
-        node.children.forEach((childnode) => {
-          addNodetoChart(childnode, node);
-          addNodeChildrentoChartRecursive(childnode);
-        });
-      }
-
-      if (rootNode != null) {
-        addNodetoChart(rootNode, null);
-        addNodeChildrentoChartRecursive(rootNode);
+      let sunburstData = new SunburstData();
+      if (cellSetData != null) {
+        sunburstData = createSunburstData(cellSetData);
       }
 
       const container = useRef<HTMLDivElement>(null);
@@ -68,10 +47,13 @@ export const PlotlySunburst = withQueryResult(
               data={[
                 {
                   type: "sunburst",
-                  ids: sunburstdata.ids,
-                  labels: sunburstdata.labels,
-                  parents: sunburstdata.parents,
-                  values: sunburstdata.values,
+                  ids: sunburstData.getIDs(),
+                  labels: sunburstData.getLabels(),
+                  parents: sunburstData.getParents(),
+                  values: sunburstData.getValues(),
+                  branchvalues: "total",
+                  // @ts-expect-error
+                  sort: false,
                 },
               ]}
               layout={{

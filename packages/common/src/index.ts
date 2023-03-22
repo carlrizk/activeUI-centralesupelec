@@ -1,3 +1,2 @@
-export type { MeasureData, DataNode, HierarchyData } from "./common.types.js";
-export { extractData } from "./extractData.js";
-export { extractHierarchyData } from "./extractHierarchyData.js";
+export type { CellSetData, DataNode, MeasureData } from "./common.types.js";
+export { extractCellSetData } from "./extractCellSetData.js";
