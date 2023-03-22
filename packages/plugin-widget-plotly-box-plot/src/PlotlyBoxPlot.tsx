@@ -1,4 +1,4 @@
-import { extractData } from "@activeui-cs/common";
+import { extractCellSetData, MeasureData } from "@activeui-cs/common";
 import { PlotBase, PlotParams } from "@activeui-cs/react-utils";
 import {
   WidgetWithQueryProps,
@@ -16,30 +16,55 @@ export const PlotlyBoxPlot = withQueryResult(
     memo((props: WidgetWithQueryProps<PlotlyWidgetState>) => {
       const { data, error, isLoading } = props.queryResult;
 
-      const extractedData = extractData(data);
+      let extractedData: MeasureData[] = [];
 
-      const showAxis = extractedData.length > 0;
+      if (data !== undefined) {
+        const cellSetData = extractCellSetData(data);
+        if (cellSetData !== null) extractedData = cellSetData.getMeasureData();
+      }
+      const firstMeasure = extractedData.length >= 1;
 
       const container = useRef<HTMLDivElement>(null);
+
       // @ts-expect-error
       const { height, width } = useComponentSize(container);
 
-      // Possibility to add functionalities
       const plotParams: PlotParams = {
         data: extractedData.map((result) => {
-          return { y: result.values, type: "box", name: result.measureName };
+          return {
+            y: result.values,
+            type: "box",
+            name: result.measureName,
+          };
         }),
         layout: {
           showlegend: true,
+          autosize: true,
+          hovermode: "closest",
           height,
           width: width - 25,
           boxmode: "group",
           xaxis: {
-            visible: showAxis,
+            visible: true,
+            autotick: true,
+            zeroline: !firstMeasure,
+            range: firstMeasure ? undefined : [0, 100],
+            tickmode: firstMeasure ? "auto" : "array",
+            ticktext: firstMeasure ? undefined : ["", "", "", ""],
+            tickvals: firstMeasure ? undefined : [0, 25, 50, 75],
           },
           yaxis: {
-            visible: showAxis,
+            visible: true,
+            autotick: true,
+            zeroline: !firstMeasure,
+            range: firstMeasure ? undefined : [0, 100],
+            tickmode: firstMeasure ? "auto" : "array",
+            ticktext: firstMeasure ? undefined : ["", "", "", ""],
+            tickvals: firstMeasure ? undefined : [0, 25, 50, 75],
           },
+        },
+        config: {
+          staticPlot: !firstMeasure,
         },
       };
 

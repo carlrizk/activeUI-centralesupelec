@@ -10,7 +10,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc --build --clean && tsc --build",
+    "build": "tsc --build",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "start": "tsc --watch",

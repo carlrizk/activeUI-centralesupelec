@@ -1,3 +1,4 @@
+import { CellSetData, extractCellSetData } from "@activeui-cs/common";
 import { PlotBase } from "@activeui-cs/react-utils";
 import {
   WidgetWithQueryProps,
@@ -5,14 +6,11 @@ import {
 } from "@activeviam/activeui-sdk";
 import { PlotlyWidgetState, withoutIrrelevantRenders } from "@activeviam/chart";
 import useComponentSize from "@rehooks/component-size";
-import { Spin, Alert, Space } from "antd";
+import { Alert, Space, Spin } from "antd";
 import { memo, useRef } from "react";
-import {
-  extractHierarchyData,
-  DataNode,
-  HierarchyData,
-} from "@activeui-cs/common";
 import { useIntl } from "react-intl";
+import { createSunburstData } from "./createSunburstData.js";
+import { SunburstData } from "./sunburst.types.js";
 
 /* eslint-disable react/display-name */
 export const PlotlySunburst = withQueryResult(
@@ -21,43 +19,26 @@ export const PlotlySunburst = withQueryResult(
       const { formatMessage } = useIntl();
       const { data, error, isLoading } = props.queryResult;
 
-      const rootNode = extractHierarchyData(data);
-      const sunburstdata: HierarchyData = {
-        ids: [],
-        labels: [],
-        parents: [],
-        values: [],
-      };
+      let cellSetData: CellSetData | null = null;
+      if (data != null) cellSetData = extractCellSetData(data);
 
-      function addNodetoChart(
-        node: DataNode,
-        parent: DataNode | null
-      ): boolean {
-        if (node.value <= 0) return false;
-        sunburstdata.ids.push(node.id);
-        sunburstdata.labels.push(node.label);
-        sunburstdata.parents.push(parent === null ? "" : parent.id);
-        sunburstdata.values.push(node.value);
-        return true;
+      let sunburstData = new SunburstData();
+      if (cellSetData != null) {
+        sunburstData = createSunburstData(cellSetData);
       }
 
-      function addNodeChildrentoChartRecursive(node: DataNode): boolean {
-        if (node.value <= 0) return false;
-        for (let [, childnode] of node.children) {
-          if (!addNodetoChart(childnode, node)) return false;
-          if (!addNodeChildrentoChartRecursive(childnode)) return false;
-        }
-        return true;
+      const hasMeasures =
+        cellSetData != null && cellSetData?.measures.length !== 0;
+
+      if (hasMeasures && cellSetData !== null) {
+        const measureName = cellSetData.measures[0];
+        sunburstData.getLabels()[0] = measureName;
+      } else {
+        sunburstData.getLabels()[0] = "";
       }
 
-      let doesNotContainNegativeValue = true;
-      if (rootNode != null) {
-        if (
-          !addNodetoChart(rootNode, null) ||
-          !addNodeChildrentoChartRecursive(rootNode)
-        )
-          doesNotContainNegativeValue = false;
-      }
+      const doesNotContainNegativeValue =
+        sunburstData.getValues().find((value) => value < 0) === undefined;
 
       const container = useRef<HTMLDivElement>(null);
       // @ts-expect-error
@@ -81,11 +62,13 @@ export const PlotlySunburst = withQueryResult(
               data={[
                 {
                   type: "sunburst",
-                  ids: sunburstdata.ids,
-                  labels: sunburstdata.labels,
-                  parents: sunburstdata.parents,
-                  values: sunburstdata.values,
+                  ids: sunburstData.getIDs(),
+                  labels: sunburstData.getLabels(),
+                  parents: sunburstData.getParents(),
+                  values: hasMeasures ? sunburstData.getValues() : undefined,
                   branchvalues: "total",
+                  // @ts-expect-error
+                  sort: false,
                 },
               ]}
               layout={{
