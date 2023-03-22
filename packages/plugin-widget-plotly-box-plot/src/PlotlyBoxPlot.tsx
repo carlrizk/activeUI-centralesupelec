@@ -23,16 +23,20 @@ export const PlotlyBoxPlot = withQueryResult(
         if (cellSetData !== null) extractedData = cellSetData.getMeasureData();
       }
 
-      const showAxis = extractedData.length > 0;
-
       const container = useRef<HTMLDivElement>(null);
+
       // @ts-expect-error
       const { height, width } = useComponentSize(container);
 
-      // Possibility to add functionalities
+      console.log(extractedData);
+
       const plotParams: PlotParams = {
         data: extractedData.map((result) => {
-          return { y: result.values, type: "box", name: result.measureName };
+          return {
+            y: result.values,
+            type: "box",
+            name: result.measureName,
+          };
         }),
         layout: {
           showlegend: true,
@@ -40,10 +44,10 @@ export const PlotlyBoxPlot = withQueryResult(
           width: width - 25,
           boxmode: "group",
           xaxis: {
-            visible: showAxis,
+            visible: true,
           },
           yaxis: {
-            visible: showAxis,
+            visible: true,
           },
         },
       };
