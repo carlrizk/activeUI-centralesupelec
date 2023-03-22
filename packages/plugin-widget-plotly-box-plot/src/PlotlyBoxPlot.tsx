@@ -29,8 +29,6 @@ export const PlotlyBoxPlot = withQueryResult(
       // @ts-expect-error
       const { height, width } = useComponentSize(container);
 
-      console.log(extractedData);
-
       const plotParams: PlotParams = {
         data: extractedData.map((result) => {
           return {
