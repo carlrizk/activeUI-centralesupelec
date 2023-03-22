@@ -12,11 +12,13 @@ import {
   DataNode,
   HierarchyData,
 } from "@activeui-cs/common";
+import { useIntl } from "react-intl";
 
 /* eslint-disable react/display-name */
 export const PlotlySunburst = withQueryResult(
   withoutIrrelevantRenders(
     memo((props: WidgetWithQueryProps<PlotlyWidgetState>) => {
+      const { formatMessage } = useIntl();
       const { data, error, isLoading } = props.queryResult;
 
       const rootNode = extractHierarchyData(data);
@@ -94,10 +96,11 @@ export const PlotlySunburst = withQueryResult(
           ) : (
             <Space direction="vertical" style={{ width: "100%" }}>
               <Alert
-                message="Warning : measure with negative values!"
+                message={formatMessage({
+                  id: "aui.plugins.widget.plotly-sunburst.negativeValuesWarning",
+                })}
                 type="warning"
                 showIcon
-                closable
               />
             </Space>
           )}
